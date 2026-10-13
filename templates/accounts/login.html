@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - FoodMitra</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        min-height: 100vh;
+        background: #fff8f0;
+        overflow-x: hidden;
+      }
+
+      /* ============ PAGE SHELL ============ */
+      .page-wrap {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        background: #ff6b35;
+        overflow: hidden;
+      }
+
+      .right-shape {
+        position: absolute;
+        top: -6%;
+        bottom: -6%;
+        right: 0;
+        width: 62%;
+        background: #fff8f0;
+        border-radius: 45% 0 0 45% / 52% 0 0 52%;
+      }
+
+      .decor {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .dot-grid {
+        position: absolute;
+        top: 10%;
+        right: 8%;
+        width: 160px;
+        height: 160px;
+        background-image: radial-gradient(
+          rgba(255, 255, 255, 0.35) 1.5px,
+          transparent 1.5px
+        );
+        background-size: 14px 14px;
+        opacity: 0.5;
+      }
+
+      /* ============ TOP BAR ============ */
+      .topbar {
+        position: relative;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 26px 44px 0;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #fff;
+        font-size: 19px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .brand-badge {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+      }
+      .register-pill {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #fff;
+        color: #ff6b35;
+        font-weight: 700;
+        font-size: 13.5px;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 999px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        transition: transform 0.2s;
+      }
+      .register-pill:hover {
+        transform: translateY(-1px);
+      }
+
+      /* ============ MAIN CONTENT ROW ============ */
+      .content-row {
+        position: relative;
+        z-index: 2;
+        flex: 1;
+        display: flex;
+        min-height: calc(100vh - 76px);
+        padding: 30px 44px 50px;
+        gap: 24px;
+      }
+
+      /* ---------- LEFT: pitch + illustration ---------- */
+      .left-panel {
+        width: 44%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+        padding-right: 20px;
+      }
+      .bowl-hero {
+        margin-bottom: 6px;
+      }
+      .left-title {
+        color: #fff;
+        font-size: 34px;
+        font-weight: 800;
+        line-height: 1.25;
+        margin-bottom: 10px;
+      }
+      .left-sub {
+        color: rgba(255, 255, 255, 0.92);
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.5;
+        max-width: 340px;
+        margin-bottom: 26px;
+      }
+
+      .info-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        max-width: 340px;
+        margin-bottom: 70px;
+        position: relative;
+        z-index: 2;
+      }
+      .info-card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 14px;
+        padding: 12px 16px;
+      }
+      .info-icon-circle {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 19px;
+      }
+      .info-title {
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 2px;
+      }
+      .info-desc {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      .food-illustration {
+        position: absolute;
+        left: -10px;
+        bottom: -6px;
+        width: 300px;
+        max-width: 40vw;
+        max-height: 20vh;
+        height: auto;
+        opacity: 0.97;
+        filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.18));
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      /* ---------- RIGHT: form card ---------- */
+      .right-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .form-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        border-radius: 22px;
+        padding: 36px 40px;
+        width: 100%;
+        max-width: 470px;
+        box-shadow: 0 20px 50px rgba(255, 107, 53, 0.16);
+        animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+      .form-logo {
+        width: 62px;
+        height: 62px;
+        border-radius: 50%;
+        background: #ffe3d3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        margin: 0 auto 16px;
+      }
+      .form-title {
+        font-size: 23px;
+        font-weight: 800;
+        color: #2c2c2a;
+        text-align: center;
+        margin-bottom: 4px;
+      }
+      .form-sub {
+        font-size: 13px;
+        color: #888;
+        text-align: center;
+        margin-bottom: 26px;
+      }
+
+      .field-group {
+        margin-bottom: 16px;
+        position: relative;
+      }
+      .field-group label {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: #333;
+        display: block;
+        margin-bottom: 6px;
+      }
+      .input-wrap {
+        position: relative;
+      }
+      .input-wrap .field-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 14px;
+        color: #ff6b35;
+        pointer-events: none;
+      }
+      .input-wrap input {
+        width: 100%;
+        padding: 12px 14px 12px 40px;
+        border: 1.5px solid #e8e8e8;
+        border-radius: 10px;
+        font-size: 13.5px;
+        color: #2c2c2a;
+        background: #fff;
+        transition: all 0.2s;
+      }
+      .input-wrap.has-toggle input {
+        padding-right: 40px;
+      }
+      .toggle-eye {
+        position: absolute;
+        right: 13px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 14px;
+        color: #aaa;
+        user-select: none;
+      }
+      .field-group input:focus {
+        outline: none;
+        border-color: #ff6b35;
+        box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.12);
+      }
+      .field-group input.valid {
+        border-color: #1d9e75;
+      }
+      .field-group input.invalid {
+        border-color: #e24b4a;
+      }
+      .field-msg {
+        font-size: 11px;
+        margin-top: 4px;
+        display: none;
+      }
+      .field-msg.show {
+        display: block;
+      }
+      .field-msg.ok {
+        color: #0f6e56;
+      }
+      .field-msg.err {
+        color: #a32d2d;
+      }
+
+      .row-between {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .remember-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: #555;
+      }
+      .remember-wrap input {
+        width: 15px;
+        height: 15px;
+        accent-color: #ff6b35;
+      }
+      .forgot-link {
+        font-size: 13px;
+        color: #ff6b35;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 13px;
+        background: linear-gradient(135deg, #ff7b32, #ff5b20);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.25s;
+      }
+      .submit-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 22px rgba(255, 107, 53, 0.38);
+      }
+      .submit-btn:active {
+        transform: translateY(0);
+      }
+
+      .signup-text {
+        text-align: center;
+        font-size: 13px;
+        color: #666;
+        margin-top: 22px;
+      }
+      .signup-text a {
+        color: #ff6b35;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .alert-box {
+        background: #ffeaea;
+        border: 1px solid #f5c6c6;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 13px;
+        color: #a32d2d;
+        margin-bottom: 16px;
+        display: none;
+      }
+      .alert-box.show {
+        display: block;
+      }
+
+      /* BOTTOM TRUST STRIP */
+      .trust-strip {
+        display: flex;
+        justify-content: center;
+        gap: 46px;
+        margin-top: 26px;
+        flex-wrap: wrap;
+      }
+      .trust-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .trust-icon {
+        font-size: 20px;
+        color: #ff6b35;
+      }
+      .trust-title {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: #2c2c2a;
+      }
+      .trust-desc {
+        font-size: 11px;
+        color: #999;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(40px) scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @media (max-width: 900px) {
+        .right-shape {
+          display: none;
+        }
+        .page-wrap {
+          background: #fff8f0;
+        }
+        .content-row {
+          flex-direction: column;
+          padding: 20px;
+        }
+        .left-panel {
+          width: 100%;
+          background: #ff6b35;
+          border-radius: 22px;
+          padding: 30px 24px 50px;
+          margin-bottom: 24px;
+        }
+        .food-illustration {
+          display: none;
+        }
+        .topbar {
+          padding: 20px 24px 0;
+        }
+        .trust-strip {
+          gap: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-wrap">
+      <div class="right-shape"></div>
+      <div class="decor">
+        <div class="dot-grid"></div>
+      </div>
+
+      <div
+        style="
+          position: relative;
+          z-index: 3;
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+        "
+      >
+        <div class="topbar">
+          <a class="brand" href="/">
+            <span class="brand-badge">🍱</span>
+            FoodMitra
+          </a>
+          <a class="register-pill" href="/accounts/register/"> 👤 Register </a>
+        </div>
+
+        <div class="content-row">
+          <!-- LEFT PANEL -->
+          <div class="left-panel">
+            <svg
+              class="bowl-hero"
+              width="140"
+              height="110"
+              viewBox="0 0 140 110"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <ellipse cx="70" cy="88" rx="62" ry="18" fill="#3a3a3a" />
+              <ellipse cx="70" cy="80" rx="55" ry="15" fill="#ffffff" />
+              <ellipse cx="70" cy="74" rx="46" ry="11" fill="#e8611f" />
+              <circle cx="50" cy="70" r="7" fill="#ffce54" />
+              <circle cx="75" cy="66" r="6" fill="#f4a623" />
+              <circle cx="92" cy="72" r="6" fill="#ffce54" />
+              <path
+                d="M40,40 q0,-14 6,-20 M70,36 q0,-16 4,-24 M96,42 q4,-12 10,-18"
+                stroke="rgba(255,255,255,0.5)"
+                stroke-width="3"
+                fill="none"
+                stroke-linecap="round"
+              />
+            </svg>
+            <div class="left-title">Welcome back! 💛</div>
+            <div class="left-sub">
+              Login to order delicious home cooked food from verified cooks near
+              you
+            </div>
+
+            <div class="info-cards">
+              <div class="info-card">
+                <span class="info-icon-circle">🛡️</span>
+                <div>
+                  <div class="info-title">Verified &amp; Trusted</div>
+                  <div class="info-desc">
+                    All home cooks are verified for your safety
+                  </div>
+                </div>
+              </div>
+              <div class="info-card">
+                <span class="info-icon-circle">📲</span>
+                <div>
+                  <div class="info-title">Live Order Tracking</div>
+                  <div class="info-desc">
+                    Know exactly when your meal is on the way
+                  </div>
+                </div>
+              </div>
+              <div class="info-card">
+                <span class="info-icon-circle">❤️</span>
+                <div>
+                  <div class="info-title">Made with Love</div>
+                  <div class="info-desc">
+                    Enjoy homemade meals made with love &amp; care
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- flat vector food-bowl illustration (no photos, avoids copyright) -->
+            <svg
+              class="food-illustration"
+              viewBox="0 0 300 220"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <ellipse
+                cx="90"
+                cy="150"
+                rx="85"
+                ry="55"
+                fill="#f3f3f3"
+                opacity="0.15"
+              />
+              <ellipse cx="90" cy="145" rx="78" ry="50" fill="#4a4a4a" />
+              <ellipse cx="90" cy="138" rx="70" ry="42" fill="#ffffff" />
+              <ellipse cx="90" cy="134" rx="58" ry="32" fill="#fdf6e3" />
+              <ellipse
+                cx="70"
+                cy="128"
+                rx="10"
+                ry="5"
+                fill="#f4a623"
+                opacity="0.7"
+              />
+              <ellipse
+                cx="105"
+                cy="140"
+                rx="8"
+                ry="4"
+                fill="#f4a623"
+                opacity="0.7"
+              />
+              <ellipse cx="210" cy="180" rx="95" ry="38" fill="#3a3a3a" />
+              <ellipse cx="210" cy="172" rx="85" ry="32" fill="#ffffff" />
+              <ellipse cx="210" cy="167" rx="72" ry="24" fill="#e8611f" />
+              <circle cx="185" cy="163" r="9" fill="#ffce54" />
+              <circle cx="215" cy="158" r="7" fill="#f4a623" />
+              <circle cx="235" cy="167" r="8" fill="#ffce54" />
+              <circle cx="200" cy="172" r="6" fill="#f4a623" />
+              <circle cx="255" cy="150" r="16" fill="#e0483a" />
+              <path
+                d="M255,134 q-6,-8 -14,-6"
+                stroke="#3f8a3f"
+                stroke-width="3"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <path
+                d="M20,120 q10,-16 26,-8"
+                stroke="#3f8a3f"
+                stroke-width="3"
+                fill="none"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+
+          <!-- RIGHT PANEL -->
+          <div class="right-panel">
+            <div class="form-card">
+              <div class="form-logo">🍱</div>
+              <div class="form-title">Login to FoodMitra</div>
+              <div class="form-sub">Enter your credentials to continue</div>
+              <div
+                class="alert-box {% if messages %}show{% endif %}"
+                id="alertBox"
+              >
+                {% for message in messages %}{{ message }}{% endfor %}
+              </div>
+
+              <form method="POST" id="loginForm">
+                {% csrf_token %}
+
+                <div class="field-group">
+                  <label>Username</label>
+                  <div class="input-wrap">
+                    <span class="field-icon">👤</span>
+                    <input
+                      type="text"
+                      name="username"
+                      id="username"
+                      placeholder="Enter your username"
+                      oninput="validateUsername()"
+                    />
+                  </div>
+                  <div class="field-msg" id="userMsg"></div>
+                </div>
+
+                <div class="field-group">
+                  <label>Password</label>
+                  <div class="input-wrap has-toggle">
+                    <span class="field-icon">🔒</span>
+                    <input
+                      type="password"
+                      name="password"
+                      id="password"
+                      placeholder="Enter your password"
+                      oninput="validatePwd()"
+                    />
+                    <span
+                      class="toggle-eye"
+                      onclick="togglePwd('password', this)"
+                      >👁️</span
+                    >
+                  </div>
+                  <div class="field-msg" id="passMsg"></div>
+                </div>
+
+                <div class="row-between">
+                  <label class="remember-wrap">
+                    <input type="checkbox" name="remember" id="remember" />
+                    Remember me
+                  </label>
+                  <a class="forgot-link" href="/accounts/password-reset/">Forgot password?</a>
+                </div>
+
+                <button type="button" class="submit-btn" onclick="submitForm()">
+                  Login →
+                </button>
+              </form>
+
+              <div class="signup-text">
+                Don't have an account?
+                <a href="/accounts/register/">Register here</a>
+              </div>
+            </div>
+
+            <div class="trust-strip">
+              <div class="trust-item">
+                <span class="trust-icon">🛡️</span>
+                <div>
+                  <div class="trust-title">100% Safe</div>
+                  <div class="trust-desc">Secure &amp; Reliable</div>
+                </div>
+              </div>
+              <div class="trust-item">
+                <span class="trust-icon">⚡</span>
+                <div>
+                  <div class="trust-title">Quick Login</div>
+                  <div class="trust-desc">Hassle-free access</div>
+                </div>
+              </div>
+              <div class="trust-item">
+                <span class="trust-icon">🎧</span>
+                <div>
+                  <div class="trust-title">24/7 Support</div>
+                  <div class="trust-desc">We're here to help</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function togglePwd(id, el) {
+        const input = document.getElementById(id);
+        if (input.type === "password") {
+          input.type = "text";
+          el.textContent = "🙈";
+        } else {
+          input.type = "password";
+          el.textContent = "👁️";
+        }
+      }
+
+      function showMsg(id, text, type) {
+        const el = document.getElementById(id);
+        el.textContent = text;
+        el.className = "field-msg show " + (type === "ok" ? "ok" : "err");
+      }
+      function setValid(id, ok) {
+        document.getElementById(id).className = ok ? "valid" : "invalid";
+      }
+
+      function validateUsername() {
+        const v = document.getElementById("username").value.trim();
+        if (v.length < 3) {
+          showMsg("userMsg", "Enter your username", "err");
+          setValid("username", false);
+        } else {
+          showMsg("userMsg", "", "ok");
+          setValid("username", true);
+        }
+      }
+
+      function validatePwd() {
+        const v = document.getElementById("password").value;
+        if (v.length < 1) {
+          showMsg("passMsg", "Enter your password", "err");
+          setValid("password", false);
+        } else {
+          showMsg("passMsg", "", "ok");
+          setValid("password", true);
+        }
+      }
+
+      function submitForm() {
+        validateUsername();
+        validatePwd();
+        const invalids = document.querySelectorAll("input.invalid");
+        if (invalids.length > 0) {
+          const alertBox = document.getElementById("alertBox");
+          alertBox.textContent = "Please enter your username and password.";
+          alertBox.classList.add("show");
+          invalids[0].focus();
+          return;
+        }
+        document.getElementById("loginForm").submit();
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - FoodMitra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f5f5f5; }
+        .navbar { background: #ff6b35; padding: 16px 40px; display: flex; align-items: center; justify-content: space-between; }
+        .nav-brand { color: #fff; font-size: 22px; font-weight: 800; text-decoration: none; }
+        .nav-back { padding: 9px 22px; background: #fff; color: #ff6b35; border-radius: 10px; font-size: 13px; font-weight: 700; text-decoration: none; }
+
+        .page-wrap { max-width: 700px; margin: 40px auto; padding: 0 24px 60px; }
+
+        .page-header { background: linear-gradient(135deg, #ff6b35, #f7931e); border-radius: 20px; padding: 32px; color: #fff; margin-bottom: 28px; text-align: center; }
+        .page-header h1 { font-size: 28px; font-weight: 900; margin-bottom: 8px; }
+        .page-header p { font-size: 14px; opacity: 0.9; }
+
+        .success-box { background: #e1f5ee; border: 1px solid #a5d6a7; border-radius: 14px; padding: 20px; text-align: center; margin-bottom: 24px; }
+        .success-icon { font-size: 48px; margin-bottom: 12px; }
+        .success-title { font-size: 18px; font-weight: 800; color: #0f6e56; margin-bottom: 6px; }
+        .success-sub { font-size: 13px; color: #555; }
+
+        .form-card { background: #fff; border-radius: 20px; padding: 32px; border: 1px solid #ffe0d0; }
+
+        .field-group { margin-bottom: 18px; }
+        .field-group label { font-size: 12px; font-weight: 700; color: #444; display: block; margin-bottom: 6px; }
+        .field-group input, .field-group select, .field-group textarea { width: 100%; padding: 12px 14px; border: 1.5px solid #e8e8e8; border-radius: 10px; font-size: 13.5px; font-family: 'Poppins', sans-serif; color: #1a1a1a; outline: none; transition: border-color 0.2s; background: #fff; }
+        .field-group input:focus, .field-group select:focus, .field-group textarea:focus { border-color: #ff6b35; box-shadow: 0 0 0 3px rgba(255,107,53,0.1); }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+        .submit-btn { width: 100%; padding: 14px; background: #ff6b35; color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.2s; margin-top: 8px; }
+        .submit-btn:hover { background: #e55a28; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,107,53,0.35); }
+
+        .info-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
+        .info-card { background: #fff; border-radius: 14px; padding: 20px; text-align: center; border: 1px solid #ffe0d0; }
+        .info-icon { font-size: 28px; margin-bottom: 8px; }
+        .info-title { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+        .info-sub { font-size: 11px; color: #888; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/" class="nav-brand">🍱 FoodMitra</a>
+    <a href="/" class="nav-back">← Home</a>
+</nav>
+
+<div class="page-wrap">
+    <div class="page-header">
+        <h1>📞 Contact Us</h1>
+        <p>Have a complaint or query? We are here to help you!</p>
+    </div>
+
+    <div class="info-cards">
+        <div class="info-card">
+            <div class="info-icon">📧</div>
+            <div class="info-title">Email Us</div>
+            <div class="info-sub">support@foodmitra.in</div>
+        </div>
+        <div class="info-card">
+            <div class="info-icon">⏰</div>
+            <div class="info-title">Response Time</div>
+            <div class="info-sub">Within 24 hours</div>
+        </div>
+        <div class="info-card">
+            <div class="info-icon">🛡️</div>
+            <div class="info-title">Support</div>
+            <div class="info-sub">Mon - Sat, 9 AM - 6 PM</div>
+        </div>
+    </div>
+
+    {% if success %}
+    <div class="success-box">
+        <div class="success-icon">✅</div>
+        <div class="success-title">Message Sent Successfully!</div>
+        <div class="success-sub">Thank you for contacting us! We will get back to you within 24 hours.</div>
+    </div>
+    {% endif %}
+
+    <div class="form-card">
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="field-row">
+                <div class="field-group">
+                    <label>Your Name</label>
+                    <input type="text" name="name" placeholder="Enter your name"
+                    value="{% if request.user.is_authenticated %}{{ request.user.get_full_name }}{% endif %}" required>
+                </div>
+                <div class="field-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" placeholder="Enter your email"
+                    value="{% if request.user.is_authenticated %}{{ request.user.email }}{% endif %}" required>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label>Subject</label>
+                <select name="subject" required>
+                    <option value="">-- Select subject --</option>
+                    <option value="Complaint about food quality">🍛 Complaint about food quality</option>
+                    <option value="Complaint about cook behaviour">👩‍🍳 Complaint about cook behaviour</option>
+                    <option value="Payment issue">💳 Payment issue</option>
+                    <option value="Order not delivered">📦 Order not delivered</option>
+                    <option value="Wrong order delivered">❌ Wrong order delivered</option>
+                    <option value="Account issue">👤 Account issue</option>
+                    <option value="Other">📝 Other</option>
+                </select>
+            </div>
+
+            <div class="field-group">
+                <label>Your Message</label>
+                <textarea name="message" rows="5" placeholder="Describe your complaint or query in detail..." required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">📧 Send Message</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

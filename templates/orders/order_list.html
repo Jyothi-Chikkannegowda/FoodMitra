@@ -1,0 +1,938 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Orders - FoodMitra</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --clr-primary: #ff6b35;
+        --clr-primary-dark: #e55a28;
+        --clr-gold: #f7931e;
+        --clr-plum: #6a1b9a;
+        --clr-ink: #2b2420;
+        --clr-muted: #8a8078;
+        --clr-border: #ffe0d0;
+        --font-display: "Poppins", "Segoe UI", sans-serif;
+        --font-body: "Inter", "Segoe UI", sans-serif;
+      }
+      body {
+        background: #f7f5f2;
+        font-family: var(--font-body);
+        color: var(--clr-ink);
+      }
+
+      /* NAVBAR */
+      .navbar {
+        background: var(--clr-primary);
+        padding: 14px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 4px 14px rgba(255, 107, 53, 0.2);
+      }
+      .nav-brand {
+        color: #fff;
+        font-family: var(--font-display);
+        font-size: 20px;
+        font-weight: 700;
+        text-decoration: none;
+        letter-spacing: -0.01em;
+      }
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .nav-user {
+        color: #fff;
+        font-size: 13.5px;
+        font-weight: 600;
+      }
+      .nav-back {
+        padding: 8px 20px;
+        background: #fff;
+        color: var(--clr-primary);
+        border: none;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: transform 0.15s;
+      }
+      .nav-back:hover {
+        transform: translateY(-1px);
+      }
+
+      .page-wrap {
+        max-width: 1180px;
+        margin: 28px auto;
+        padding: 0 24px 50px;
+      }
+
+      /* HEADER */
+      .page-header {
+        background: #fff;
+        border-radius: 18px;
+        border: 1px solid var(--clr-border);
+        padding: 24px 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .page-icon-badge {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+        border-radius: 15px;
+        background: #ffe9dd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 23px;
+      }
+      .page-title {
+        font-family: var(--font-display);
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--clr-ink);
+        letter-spacing: -0.01em;
+      }
+      .page-sub {
+        font-size: 13px;
+        color: var(--clr-muted);
+        margin-top: 2px;
+      }
+      .header-illustration {
+        width: 90px;
+        height: 60px;
+        opacity: 0.9;
+      }
+
+      /* STATS STRIP */
+      .stats-strip {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 14px;
+        margin-bottom: 20px;
+      }
+      .stat-card {
+        background: #fff;
+        border-radius: 15px;
+        border: 1px solid var(--clr-border);
+        padding: 16px 18px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.06);
+      }
+      .stat-icon {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+      .stat-icon.tone-total {
+        background: #ffe9dd;
+      }
+      .stat-icon.tone-pending {
+        background: #fff1d6;
+      }
+      .stat-icon.tone-delivered {
+        background: #e1f5ee;
+      }
+      .stat-icon.tone-rejected {
+        background: #fdecea;
+      }
+      .stat-icon.tone-spent {
+        background: #f1e6f8;
+      }
+      .stat-num {
+        font-family: var(--font-display);
+        font-size: 19px;
+        font-weight: 700;
+        line-height: 1.1;
+      }
+      .stat-label {
+        font-size: 11px;
+        color: var(--clr-muted);
+        margin-top: 1px;
+        font-weight: 500;
+      }
+
+      /* SEARCH + FILTER ROW */
+      .toolbar {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+      .search-box {
+        flex: 1;
+        min-width: 220px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #fff;
+        border: 1px solid var(--clr-border);
+        border-radius: 12px;
+        padding: 10px 16px;
+      }
+      .search-box input {
+        border: none;
+        outline: none;
+        font-size: 13.5px;
+        flex: 1;
+        font-family: var(--font-body);
+        background: transparent;
+      }
+      .filter-pills {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .filter-pill {
+        padding: 9px 16px;
+        border-radius: 10px;
+        border: 1px solid var(--clr-border);
+        background: #fff;
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--clr-ink);
+        cursor: pointer;
+        transition: all 0.15s;
+        font-family: var(--font-body);
+      }
+      .filter-pill:hover {
+        border-color: var(--clr-primary);
+      }
+      .filter-pill.active {
+        background: var(--clr-primary);
+        color: #fff;
+        border-color: var(--clr-primary);
+      }
+
+      /* MAIN LAYOUT */
+      .main-layout {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 20px;
+        align-items: start;
+      }
+
+      /* ORDER CARD */
+      .order-card {
+        background: #fff;
+        border-radius: 16px;
+        border: 1px solid var(--clr-border);
+        border-left: 4px solid var(--status-color, var(--clr-primary));
+        padding: 18px 20px;
+        margin-bottom: 14px;
+        display: flex;
+        gap: 16px;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .order-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.06);
+      }
+      .order-card.status-pending {
+        --status-color: #f7931e;
+      }
+      .order-card.status-accepted {
+        --status-color: #1565c0;
+      }
+      .order-card.status-preparing {
+        --status-color: #8e4bb0;
+      }
+      .order-card.status-ready {
+        --status-color: #2e7d32;
+      }
+      .order-card.status-delivered {
+        --status-color: #0f6e56;
+      }
+      .order-card.status-rejected {
+        --status-color: #b71c1c;
+      }
+      .order-thumb {
+        width: 90px;
+        height: 90px;
+        min-width: 90px;
+        border-radius: 13px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #fff3ee, #ffe0d0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+      }
+      .order-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .order-main {
+        flex: 1;
+        min-width: 0;
+      }
+      .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 4px;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .order-id {
+        font-size: 12px;
+        color: var(--clr-muted);
+        font-weight: 600;
+      }
+      .order-date {
+        font-size: 12px;
+        color: var(--clr-muted);
+      }
+      .order-food {
+        font-family: var(--font-display);
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--clr-ink);
+      }
+      .order-cook {
+        font-size: 12.5px;
+        color: var(--clr-muted);
+        margin-top: 1px;
+        margin-bottom: 10px;
+      }
+      .order-meta {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+      }
+      .meta-tag {
+        padding: 4px 11px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .tag-price {
+        background: #fff3ee;
+        color: var(--clr-primary);
+      }
+      .tag-qty {
+        background: #fff3e0;
+        color: #e65100;
+      }
+      .tag-delivery {
+        background: #e3f2fd;
+        color: #1565c0;
+        text-transform: capitalize;
+      }
+
+      /* PROGRESS STEPPER (based on real status only) */
+      .stepper {
+        display: flex;
+        align-items: center;
+        margin-bottom: 14px;
+        max-width: 360px;
+      }
+      .step {
+        display: flex;
+        align-items: center;
+        flex: 1;
+      }
+      .step-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #e6e0da;
+        flex-shrink: 0;
+      }
+      .step-line {
+        flex: 1;
+        height: 2px;
+        background: #e6e0da;
+      }
+      .step.done .step-dot {
+        background: var(--status-color, var(--clr-primary));
+      }
+      .step.done .step-line {
+        background: var(--status-color, var(--clr-primary));
+      }
+      .step-label {
+        font-size: 9.5px;
+        color: var(--clr-muted);
+        margin-top: 4px;
+        white-space: nowrap;
+      }
+      .stepper-wrap {
+        margin-bottom: 6px;
+      }
+
+      .rejected-banner {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #fdecea;
+        color: #b71c1c;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 6px 12px;
+        border-radius: 9px;
+        margin-bottom: 12px;
+      }
+
+      .action-btns {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .btn-track {
+        padding: 8px 16px;
+        background: #fff3ee;
+        color: var(--clr-primary);
+        border: 1.5px solid var(--clr-primary);
+        border-radius: 9px;
+        font-size: 12.5px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.15s;
+      }
+      .btn-track:hover {
+        background: var(--clr-primary);
+        color: #fff;
+      }
+      .btn-outline {
+        padding: 8px 16px;
+        background: #fff;
+        color: var(--clr-ink);
+        border: 1.5px solid #e6e0da;
+        border-radius: 9px;
+        font-size: 12.5px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.15s;
+      }
+      .btn-outline:hover {
+        border-color: var(--clr-ink);
+      }
+      .btn-review {
+        padding: 8px 16px;
+        background: linear-gradient(135deg, #ff7b32, #ff5b20);
+        color: #fff;
+        border: none;
+        border-radius: 9px;
+        font-size: 12.5px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.15s;
+      }
+      .btn-review:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(255, 107, 53, 0.3);
+      }
+
+      /* SIDEBAR */
+      .side-card {
+        background: #fff;
+        border-radius: 16px;
+        border: 1px solid var(--clr-border);
+        padding: 20px;
+        margin-bottom: 16px;
+      }
+      .side-title {
+        font-family: var(--font-display);
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        font-size: 13px;
+        border-bottom: 1px solid #fbf3ee;
+      }
+      .summary-row:last-child {
+        border-bottom: none;
+      }
+      .summary-row span:first-child {
+        color: var(--clr-muted);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .summary-row span:last-child {
+        font-weight: 700;
+        color: var(--clr-ink);
+      }
+      .quick-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 0;
+        text-decoration: none;
+        color: var(--clr-ink);
+        border-bottom: 1px solid #fbf3ee;
+      }
+      .quick-link:last-child {
+        border-bottom: none;
+      }
+      .quick-link-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .quick-link-icon {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        border-radius: 10px;
+        background: #fff3ee;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+      }
+      .quick-link-title {
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .quick-link-desc {
+        font-size: 11px;
+        color: var(--clr-muted);
+      }
+      .promo-card {
+        background: linear-gradient(135deg, #ff6b35, #f7931e);
+        border-radius: 16px;
+        padding: 22px 20px;
+        text-align: center;
+        color: #fff;
+      }
+      .promo-title {
+        font-family: var(--font-display);
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+      .promo-sub {
+        font-size: 12px;
+        opacity: 0.9;
+        margin-bottom: 14px;
+      }
+      .promo-btn {
+        display: inline-block;
+        padding: 10px 22px;
+        background: #fff;
+        color: var(--clr-primary);
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .no-orders {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--clr-muted);
+        background: #fff;
+        border-radius: 18px;
+        border: 1px solid var(--clr-border);
+      }
+      .no-orders-icon {
+        font-size: 58px;
+        margin-bottom: 16px;
+      }
+      .no-orders h4 {
+        font-family: var(--font-display);
+        font-size: 17px;
+        color: var(--clr-ink);
+        margin-bottom: 6px;
+      }
+
+      @media (max-width: 900px) {
+        .main-layout {
+          grid-template-columns: 1fr;
+        }
+        .stats-strip {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .order-card {
+          flex-direction: column;
+        }
+        .order-thumb {
+          width: 100%;
+          height: 140px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a class="nav-brand" href="/">🍱 FoodMitra</a>
+      <div class="nav-right">
+        <span class="nav-user">{{ request.user.first_name }}</span>
+        <a class="nav-back" href="/accounts/dashboard/">← Dashboard</a>
+      </div>
+    </nav>
+
+    <div class="page-wrap">
+      <!-- HEADER -->
+      <div class="page-header">
+        <div class="header-left">
+          <div class="page-icon-badge">📦</div>
+          <div>
+            <div class="page-title">My Orders</div>
+            <div class="page-sub">
+              Track all your food orders, right here in one place
+            </div>
+          </div>
+        </div>
+        <svg
+          class="header-illustration"
+          viewBox="0 0 140 90"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            x="10"
+            y="30"
+            width="55"
+            height="40"
+            rx="8"
+            fill="#fff3ee"
+          />
+          <rect x="20" y="20" width="35" height="14" rx="5" fill="#ffd8b0" />
+          <circle cx="28" cy="72" r="7" fill="#2b2420" />
+          <circle cx="52" cy="72" r="7" fill="#2b2420" />
+          <rect
+            x="75"
+            y="42"
+            width="46"
+            height="30"
+            rx="7"
+            fill="#ffe0c2"
+          />
+          <path
+            d="M75,52 h46"
+            stroke="#e8611f"
+            stroke-width="2"
+          />
+          <circle cx="98" cy="22" r="12" fill="#ffc890" />
+        </svg>
+      </div>
+
+      <!-- STATS STRIP (computed live from real order data below) -->
+      <div class="stats-strip">
+        <div class="stat-card">
+          <div class="stat-icon tone-total">📋</div>
+          <div>
+            <div class="stat-num" id="statTotal">0</div>
+            <div class="stat-label">Total Orders</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon tone-pending">⏳</div>
+          <div>
+            <div class="stat-num" id="statPending">0</div>
+            <div class="stat-label">Active Orders</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon tone-delivered">✅</div>
+          <div>
+            <div class="stat-num" id="statDelivered">0</div>
+            <div class="stat-label">Delivered</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon tone-rejected">✕</div>
+          <div>
+            <div class="stat-num" id="statRejected">0</div>
+            <div class="stat-label">Rejected</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon tone-spent">💰</div>
+          <div>
+            <div class="stat-num" id="statSpent">₹0</div>
+            <div class="stat-label">Total Spent</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOLBAR -->
+      <div class="toolbar">
+        <div class="search-box">
+          🔍
+          <input
+            type="text"
+            id="orderSearch"
+            placeholder="Search orders by food, order #, or cook..."
+            oninput="filterOrders()"
+          />
+        </div>
+        <div class="filter-pills">
+          <button class="filter-pill active" onclick="setStatusFilter('all', this)">All Orders</button>
+          <button class="filter-pill" onclick="setStatusFilter('pending', this)">Pending</button>
+          <button class="filter-pill" onclick="setStatusFilter('delivered', this)">Delivered</button>
+          <button class="filter-pill" onclick="setStatusFilter('rejected', this)">Rejected</button>
+        </div>
+      </div>
+
+      <div class="main-layout">
+        <!-- ORDER LIST -->
+        <div>
+          {% if orders %}
+          <div id="orderList">
+            {% for order in orders %}
+            <div
+              class="order-card status-{{ order.status }}"
+              data-status="{{ order.status }}"
+              data-price="{{ order.total_price }}"
+              data-search="{{ order.menu_item.food_name|lower }} {{ order.cook.user.first_name|lower }} {{ order.id }}"
+            >
+              <div class="order-thumb">
+                {% if order.menu_item.photo %}
+                <img src="{{ order.menu_item.photo.url }}" alt="{{ order.menu_item.food_name }}" />
+                {% else %}
+                🍛
+                {% endif %}
+              </div>
+              <div class="order-main">
+                <div class="order-header">
+                  <span class="order-id">Order #{{ order.id }}</span>
+                  <span class="order-date">{{ order.order_time|date:"d M Y, h:i A" }}</span>
+                </div>
+                <div class="order-food">{{ order.menu_item.food_name }}</div>
+                <div class="order-cook">
+                  👩‍🍳 By {{ order.cook.user.first_name }} {{ order.cook.user.last_name }}
+                </div>
+                <div class="order-meta">
+                  <span class="meta-tag tag-qty">{{ order.quantity }} plate(s)</span>
+                  <span class="meta-tag tag-price">₹{{ order.total_price }}</span>
+                  <span class="meta-tag tag-delivery">{{ order.delivery_type }}</span>
+                </div>
+
+                {% if order.status == 'rejected' %}
+                <div class="rejected-banner">✕ This order was rejected by the cook</div>
+                {% else %}
+                <div class="stepper-wrap">
+                  <div class="stepper">
+                    <div class="step done">
+                      <div class="step-dot"></div>
+                      <div class="step-line"></div>
+                    </div>
+                    <div class="step {% if order.status == 'accepted' or order.status == 'preparing' or order.status == 'ready' or order.status == 'delivered' %}done{% endif %}">
+                      <div class="step-dot"></div>
+                      <div class="step-line"></div>
+                    </div>
+                    <div class="step {% if order.status == 'preparing' or order.status == 'ready' or order.status == 'delivered' %}done{% endif %}">
+                      <div class="step-dot"></div>
+                      <div class="step-line"></div>
+                    </div>
+                    <div class="step {% if order.status == 'ready' or order.status == 'delivered' %}done{% endif %}">
+                      <div class="step-dot"></div>
+                      <div class="step-line"></div>
+                    </div>
+                    <div class="step {% if order.status == 'delivered' %}done{% endif %}">
+                      <div class="step-dot"></div>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+
+                <div class="action-btns">
+                  {% if order.status != 'rejected' and order.status != 'delivered' %}
+                  <a href="/orders/tracking/{{ order.id }}/" class="btn-track">📍 Track Order</a>
+                  {% endif %}
+                  {% if order.status == 'delivered' %}
+                  <a href="/reviews/add/{{ order.id }}/" class="btn-review">⭐ Rate & Review</a>
+                  {% endif %}
+                  <a href="/orders/tracking/{{ order.id }}/" class="btn-outline">View Details</a>
+                  <a href="/orders/place/{{ order.menu_item.id }}/" class="btn-outline">🔁 Reorder</a>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="no-orders">
+            <div class="no-orders-icon">📋</div>
+            <h4>No orders yet</h4>
+            <p>Browse food and place your first order!</p>
+            <a
+              href="/menu/"
+              style="
+                display: inline-block;
+                margin-top: 16px;
+                padding: 11px 26px;
+                background: linear-gradient(135deg, #ff7b32, #ff5b20);
+                color: #fff;
+                border-radius: 11px;
+                text-decoration: none;
+                font-size: 13.5px;
+                font-weight: 700;
+              "
+              >Browse Food 🍛</a
+            >
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- SIDEBAR -->
+        <div>
+          <div class="side-card">
+            <div class="side-title">📊 Order Summary</div>
+            <div class="summary-row"><span>📋 Total Orders</span><span id="sumTotal">0</span></div>
+            <div class="summary-row"><span>⏳ Active Orders</span><span id="sumPending">0</span></div>
+            <div class="summary-row"><span>✅ Delivered</span><span id="sumDelivered">0</span></div>
+            <div class="summary-row"><span>✕ Rejected</span><span id="sumRejected">0</span></div>
+            <div class="summary-row"><span>💰 Total Spent</span><span id="sumSpent">₹0</span></div>
+          </div>
+
+          <div class="side-card">
+            <div class="side-title">⚡ Quick Actions</div>
+            <a class="quick-link" href="/menu/">
+              <div class="quick-link-left">
+                <div class="quick-link-icon">🍛</div>
+                <div>
+                  <div class="quick-link-title">Browse Menu</div>
+                  <div class="quick-link-desc">Explore delicious dishes</div>
+                </div>
+              </div>
+              <span>›</span>
+            </a>
+            <a class="quick-link" href="/reviews/">
+              <div class="quick-link-left">
+                <div class="quick-link-icon">⭐</div>
+                <div>
+                  <div class="quick-link-title">My Reviews</div>
+                  <div class="quick-link-desc">See your past reviews</div>
+                </div>
+              </div>
+              <span>›</span>
+            </a>
+            <a class="quick-link" href="/accounts/dashboard/">
+              <div class="quick-link-left">
+                <div class="quick-link-icon">🏠</div>
+                <div>
+                  <div class="quick-link-title">Dashboard</div>
+                  <div class="quick-link-desc">Back to your home base</div>
+                </div>
+              </div>
+              <span>›</span>
+            </a>
+          </div>
+
+          <div class="promo-card">
+            <div class="promo-title">Craving something delicious?</div>
+            <div class="promo-sub">Order your favorite food now!</div>
+            <a href="/menu/" class="promo-btn">Order Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function computeStats() {
+        const cards = document.querySelectorAll(".order-card");
+        let total = cards.length;
+        let pending = 0;
+        let delivered = 0;
+        let rejected = 0;
+        let spent = 0;
+
+        cards.forEach((c) => {
+          const status = c.dataset.status;
+          const price = parseFloat(c.dataset.price) || 0;
+          if (status === "delivered") {
+            delivered++;
+            spent += price;
+          } else if (status === "rejected") {
+            rejected++;
+          } else {
+            pending++;
+            spent += price;
+          }
+        });
+
+        document.getElementById("statTotal").textContent = total;
+        document.getElementById("statPending").textContent = pending;
+        document.getElementById("statDelivered").textContent = delivered;
+        document.getElementById("statRejected").textContent = rejected;
+        document.getElementById("statSpent").textContent = "₹" + spent.toFixed(2);
+
+        document.getElementById("sumTotal").textContent = total;
+        document.getElementById("sumPending").textContent = pending;
+        document.getElementById("sumDelivered").textContent = delivered;
+        document.getElementById("sumRejected").textContent = rejected;
+        document.getElementById("sumSpent").textContent = "₹" + spent.toFixed(2);
+      }
+
+      let currentStatusFilter = "all";
+
+      function setStatusFilter(status, btn) {
+        currentStatusFilter = status;
+        document
+          .querySelectorAll(".filter-pill")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        applyFilters();
+      }
+
+      function filterOrders() {
+        applyFilters();
+      }
+
+      function applyFilters() {
+        const search = document.getElementById("orderSearch").value.toLowerCase();
+        document.querySelectorAll(".order-card").forEach((card) => {
+          const matchesStatus =
+            currentStatusFilter === "all" ||
+            card.dataset.status === currentStatusFilter;
+          const matchesSearch = card.dataset.search.includes(search);
+          card.style.display = matchesStatus && matchesSearch ? "flex" : "none";
+        });
+      }
+
+      computeStats();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cook Dashboard - FoodMitra</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --clr-bg: #fff8f0;
+            --clr-primary: #ff6b35;
+            --clr-primary-dark: #e85a2a;
+            --clr-gold: #f7931e;
+            --clr-ink: #2b2420;
+            --clr-muted: #8a8078;
+            --clr-border: #ffe0d0;
+            --clr-card: #ffffff;
+            --font-display: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+        body { background: var(--clr-bg); font-family: var(--font-body); color: var(--clr-ink); }
+
+        .navbar { background: var(--clr-primary); padding: 14px 32px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 14px rgba(255,107,53,0.22); position: relative; z-index: 5; }
+        .nav-brand { color: #fff; font-family: var(--font-display); font-size: 20px; font-weight: 700; text-decoration: none; }
+        .nav-right { display: flex; align-items: center; gap: 14px; }
+        .nav-user { color: #fff; font-size: 13.5px; font-weight: 600; }
+        .nav-logout { padding: 8px 20px; background: rgba(255,255,255,0.95); color: var(--clr-primary); border: none; border-radius: 9px; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; transition: transform 0.15s; }
+        .nav-logout:hover { transform: translateY(-1px); }
+
+        .sidebar { width: 224px; background: #fff; height: calc(100vh - 60px); position: fixed; left: 0; top: 60px; border-right: 1px solid var(--clr-border); padding: 22px 14px; }
+        .sidebar-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; margin-bottom: 6px; border-radius: 12px; font-size: 13.5px; font-weight: 600; color: #6b6259; cursor: pointer; transition: all 0.18s; text-decoration: none; }
+        .sidebar-icon { width: 34px; height: 34px; min-width: 34px; border-radius: 50%; background: #fdf1e9; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+        .sidebar-item:hover { background: #fff3ee; color: var(--clr-primary); }
+        .sidebar-item.active { background: #fff3ee; color: var(--clr-primary-dark); }
+        .sidebar-item.active .sidebar-icon { background: linear-gradient(135deg, #ff6b35, #f7931e); color: #fff; box-shadow: 0 4px 10px rgba(255,107,53,0.35); }
+
+        .main-content { margin-left: 224px; padding: 30px 32px 50px; }
+
+        .welcome-banner { position: relative; background: linear-gradient(120deg, #ff6b35 0%, #f7931e 100%); border-radius: 22px; padding: 28px 32px; color: #fff; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; overflow: hidden; animation: fadeUp 0.5s ease both; }
+        .welcome-banner::before { content: ''; position: absolute; top: -50%; right: 8%; width: 260px; height: 260px; background: rgba(255,255,255,0.08); border-radius: 50%; }
+        .welcome-text { position: relative; z-index: 1; }
+        .welcome-text h2 { font-family: var(--font-display); font-size: 23px; font-weight: 700; margin-bottom: 5px; }
+        .welcome-text p { font-size: 13.5px; opacity: 0.92; font-weight: 500; }
+        .welcome-emoji { position: relative; z-index: 1; font-size: 56px; }
+        .verified-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.92); color: #0f6e56; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+        .pending-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.92); color: #e65100; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+
+        /* AVAILABILITY TOGGLE */
+        .availability-banner { display: flex; align-items: center; gap: 14px; border-radius: 14px; padding: 14px 20px; margin-bottom: 20px; border: 1.5px solid; }
+        .availability-banner.available { background: #e1f5ee; border-color: #a5d6a7; }
+        .availability-banner.on-leave { background: #fdecea; border-color: #f5c6c6; }
+        .avail-icon { font-size: 24px; }
+        .avail-title { font-size: 14px; font-weight: 700; }
+        .avail-title.available { color: #0f6e56; }
+        .avail-title.on-leave { color: #c62828; }
+        .avail-desc { font-size: 12px; color: #555; margin-top: 2px; }
+        .avail-btn { margin-left: auto; padding: 9px 20px; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
+        .avail-btn.go-leave { background: #e24b4a; color: #fff; }
+        .avail-btn.go-available { background: #1d9e75; color: #fff; }
+        .avail-btn:hover { transform: translateY(-1px); opacity: 0.9; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: var(--clr-card); border-radius: 16px; padding: 20px 22px; border: 1px solid var(--clr-border); display: flex; align-items: center; gap: 14px; animation: fadeUp 0.5s ease both; transition: transform 0.2s, box-shadow 0.2s; }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(255,107,53,0.1); }
+        .stat-icon { width: 46px; height: 46px; min-width: 46px; border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .stat-icon.tone-orange { background: #ffe9dd; }
+        .stat-icon.tone-gold { background: #fff1d6; }
+        .stat-icon.tone-mint { background: #e1f5ee; }
+        .stat-icon.tone-purple { background: #f1e6f8; }
+        .stat-num { font-family: var(--font-display); font-size: 23px; font-weight: 700; color: var(--clr-ink); line-height: 1.1; }
+        .stat-label { font-size: 12px; color: var(--clr-muted); margin-top: 2px; font-weight: 500; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+        .card { background: var(--clr-card); border-radius: 16px; padding: 22px; border: 1px solid var(--clr-border); animation: fadeUp 0.5s ease both; }
+        .card-title { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--clr-ink); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+
+        .order-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #fdf1ea; }
+        .order-item:last-child { border-bottom: none; }
+        .order-food { font-size: 13.5px; font-weight: 700; color: var(--clr-ink); }
+        .order-customer { font-size: 12px; color: var(--clr-muted); margin-top: 2px; }
+        .order-status { font-size: 11px; padding: 4px 11px; border-radius: 20px; font-weight: 700; text-transform: capitalize; }
+        .status-pending { background: #fff3e0; color: #e65100; }
+        .status-accepted { background: #e1f5ee; color: #0f6e56; }
+        .status-preparing { background: #e3f2fd; color: #1565c0; }
+        .status-ready { background: #f3e5f5; color: #6a1b9a; }
+        .status-delivered { background: #e1f5ee; color: #0f6e56; }
+        .status-rejected { background: #fdecea; color: #b71c1c; }
+
+        .post-menu-btn { width: 100%; padding: 13px; background: linear-gradient(135deg, #ff7b32, #ff5b20); color: #fff; border: none; border-radius: 12px; font-size: 14.5px; font-weight: 700; cursor: pointer; transition: all 0.25s; margin-top: 8px; font-family: var(--font-body); }
+        .post-menu-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(255,107,53,0.32); }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 900px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; padding: 20px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a class="nav-brand" href="/">🍱 FoodMitra</a>
+    <div class="nav-right">
+        {% if cook_profile.profile_photo %}
+        <img src="{{ cook_profile.profile_photo.url }}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #fff;">
+        {% else %}
+        <div style="width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;color:#ff6b35;font-weight:700;font-size:14px;">
+            {{ request.user.first_name|first }}
+        </div>
+        {% endif %}
+        <span class="nav-user">{{ request.user.first_name }}</span>
+        <a class="nav-logout" href="/accounts/logout/">Logout</a>
+    </div>
+</nav>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <a class="sidebar-item active" href="/accounts/dashboard/">
+        <span class="sidebar-icon">🏠</span> Dashboard
+    </a>
+    <a class="sidebar-item" href="/menu/post/">
+        <span class="sidebar-icon">🍛</span> Post Menu
+    </a>
+    <a class="sidebar-item" href="{% url 'my_menu' %}">
+        <span class="sidebar-icon">🍽</span> My Menu
+    </a>
+    <a class="sidebar-item" href="/orders/cook-orders/">
+        <span class="sidebar-icon">📋</span> My Orders
+    </a>
+    <a class="sidebar-item" href="/accounts/earnings/">
+        <span class="sidebar-icon">💰</span> Earnings
+    </a>
+    <a class="sidebar-item" href="/reviews/">
+        <span class="sidebar-icon">⭐</span> Reviews
+    </a>
+    <a class="sidebar-item" href="/accounts/profile/">
+        <span class="sidebar-icon">👤</span> My Profile
+    </a>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+
+    <!-- WELCOME BANNER -->
+    <div class="welcome-banner">
+        <div class="welcome-text">
+            <h2>Welcome back, {{ request.user.first_name }}! 👋</h2>
+            <p>Here is what is happening with your food today</p>
+            {% if cook_profile.is_verified %}
+            <div class="verified-badge" style="margin-top:12px;">✅ Verified Cook</div>
+            {% else %}
+            <div class="pending-badge" style="margin-top:12px;">⏳ Verification Pending</div>
+            {% endif %}
+        </div>
+        <div class="welcome-emoji">👩‍🍳</div>
+    </div>
+
+    <!-- AVAILABILITY TOGGLE -->
+    {% if cook_profile.is_available %}
+    <div class="availability-banner available">
+        <span class="avail-icon">🟢</span>
+        <div>
+            <div class="avail-title available">You are Available</div>
+            <div class="avail-desc">Customers can see and order your food right now!</div>
+        </div>
+        <a href="/accounts/toggle-availability/" class="avail-btn go-leave">Go On Leave</a>
+    </div>
+    {% else %}
+    <div class="availability-banner on-leave">
+        <span class="avail-icon">🔴</span>
+        <div>
+            <div class="avail-title on-leave">You are On Leave</div>
+            <div class="avail-desc">Your food is hidden from customers. Click to go available!</div>
+        </div>
+        <a href="/accounts/toggle-availability/" class="avail-btn go-available">Go Available</a>
+    </div>
+    {% endif %}
+
+    <!-- STATS -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon tone-orange">📋</div>
+            <div>
+                <div class="stat-num">{{ total_orders }}</div>
+                <div class="stat-label">Total orders</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon tone-gold">💰</div>
+            <div>
+                <div class="stat-num">₹{{ total_earnings }}</div>
+                <div class="stat-label">Total earnings</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon tone-mint">🍛</div>
+            <div>
+                <div class="stat-num">{{ total_menu_items }}</div>
+                <div class="stat-label">Menu items</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon tone-purple">⭐</div>
+            <div>
+                <div class="stat-num">{{ cook_profile.rating }}</div>
+                <div class="stat-label">Average rating</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <!-- EARNINGS CHART -->
+        <div class="card">
+            <div class="card-title">📊 Weekly Earnings</div>
+            <canvas id="earningsChart" height="200"></canvas>
+        </div>
+
+        <!-- RECENT ORDERS -->
+        <div class="card">
+            <div class="card-title">📋 Recent Orders</div>
+            {% if recent_orders %}
+            {% for order in recent_orders %}
+            <div class="order-item">
+                <div>
+                    <div class="order-food">{{ order.menu_item.food_name }}</div>
+                    <div class="order-customer">by {{ order.customer.first_name }}</div>
+                </div>
+                <div style="text-align:right;">
+                    <span class="order-status status-{{ order.status }}">{{ order.status }}</span>
+                    <div style="font-size:12px;color:#ff6b35;font-weight:700;margin-top:4px;">₹{{ order.total_price }}</div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p style="color:#888;font-size:13px;text-align:center;padding:20px;">No orders yet. Post your menu to get started!</p>
+            {% endif %}
+        </div>
+    </div>
+    <!-- POST MENU CARD -->
+    <div class="card">
+        <div class="card-title">🍛 Post Today's Menu</div>
+        <p style="font-size:13px;color:#888;margin-bottom:16px;">Share what you are cooking today and start receiving orders!</p>
+        <a href="/menu/post/"><button class="post-menu-btn">+ Post Today's Menu</button></a>
+    </div>
+</div>
+<script>
+const ctx = document.getElementById('earningsChart').getContext('2d');
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+        datasets: [{
+            label: 'Earnings (₹)',
+            data: [
+                {{ mon_earnings }},
+                {{ tue_earnings }},
+                {{ wed_earnings }},
+                {{ thu_earnings }},
+                {{ fri_earnings }},
+                {{ sat_earnings }},
+                {{ sun_earnings }}
+            ],
+            backgroundColor: 'rgba(255,107,53,0.85)',
+            borderRadius: 8,
+            borderSkipped: false
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+    }
+});
+</script>
+</body>
+</html>

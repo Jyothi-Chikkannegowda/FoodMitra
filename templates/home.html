@@ -1,0 +1,1208 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodMitra | Home Cooked Food</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: #fafafa;
+        color: #333;
+      }
+      a {
+        text-decoration: none;
+      }
+      img {
+        width: 100%;
+        display: block;
+      }
+      section {
+        padding: 80px 8%;
+      }
+      button {
+        font-family: "Poppins", sans-serif;
+      }
+      /* ================= NAVBAR ================= */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 8%;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+        z-index: 999;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 26px;
+        font-weight: 800;
+        color: #222;
+      }
+      .logo-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: #ff6b35;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+      }
+      .logo span {
+        color: #ff6b35;
+      }
+      nav {
+        display: flex;
+        gap: 35px;
+        align-items: center;
+      }
+      nav a {
+        color: #444;
+        font-size: 15px;
+        font-weight: 600;
+        transition: 0.3s;
+      }
+      nav a.active {
+        color: #ff6b35;
+      }
+      nav a:hover {
+        color: #ff6b35;
+      }
+      .login-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 26px;
+        background: #6f9d55;
+        color: white;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 15px;
+        transition: 0.3s;
+      }
+      .login-btn:hover {
+        background: #628a4b;
+      }
+      /* ================= HERO ================= */
+      .hero {
+        margin-top: 84px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 60px;
+        padding: 70px 8% 60px;
+        background: linear-gradient(to right, #fdf1e9, #fef7f2);
+      }
+      .hero-left {
+        flex: 1;
+      }
+      .hero-left h1 {
+        font-size: 54px;
+        line-height: 64px;
+        font-weight: 800;
+        margin-bottom: 22px;
+        color: #1f1f1f;
+      }
+      .hero-left span {
+        color: #ff6b35;
+      }
+      .hero-left p {
+        font-size: 17px;
+        line-height: 30px;
+        color: #666;
+        margin-bottom: 30px;
+        max-width: 520px;
+      }
+      .hero-buttons {
+        display: flex;
+        gap: 18px;
+        margin-bottom: 40px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 15px 32px;
+        border-radius: 35px;
+        font-size: 16px;
+        font-weight: 600;
+        transition: 0.3s;
+        border: none;
+        cursor: pointer;
+      }
+      .btn-primary {
+        background: #ff6b35;
+        color: white;
+      }
+      .btn-primary:hover {
+        background: #ff824f;
+      }
+      .btn-secondary {
+        background: white;
+        border: 2px solid #ff6b35;
+        color: #ff6b35;
+      }
+      .btn-secondary:hover {
+        background: #ff6b35;
+        color: white;
+      }
+      .trust-badges {
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+      }
+      .trust-badge {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .trust-badge-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #ffe3d3;
+        color: #ff6b35;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        flex-shrink: 0;
+      }
+      .trust-badge span {
+        display: block;
+        font-size: 13px;
+        font-weight: 700;
+        color: #333;
+        line-height: 18px;
+      }
+      .hero-right {
+        flex: 1;
+        position: relative;
+      }
+      .hero-right img {
+        height: 460px;
+        object-fit: cover;
+        border-radius: 25px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+      }
+      .rating-card {
+        position: absolute;
+        left: -30px;
+        bottom: 40px;
+        background: white;
+        padding: 18px 22px;
+        border-radius: 18px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        min-width: 220px;
+      }
+      .rating-avatars {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+      .rating-avatars img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 2px solid white;
+        margin-left: -10px;
+        object-fit: cover;
+      }
+      .rating-avatars img:first-child {
+        margin-left: 0;
+      }
+      .rating-avatars .stars-num {
+        margin-left: 8px;
+        font-weight: 700;
+        color: #2e9c4b;
+        font-size: 14px;
+      }
+      .rating-card h4 {
+        font-size: 15px;
+        margin-bottom: 2px;
+      }
+      .rating-card p {
+        font-size: 13px;
+        color: #777;
+      }
+      /* ================= SECTION HEADER ================= */
+      .section-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 18px;
+        background: #ffe7dc;
+        color: #ff6b35;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+        margin-bottom: 16px;
+      }
+      .section-title {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+      .section-title h2 {
+        font-size: 40px;
+        font-weight: 800;
+        margin-bottom: 10px;
+      }
+      .section-title h2 span {
+        color: #ff6b35;
+      }
+      .section-title p {
+        font-size: 16px;
+        color: #666;
+      }
+      .section-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 45px;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .section-header-row .section-title {
+        text-align: left;
+        margin-bottom: 0;
+      }
+      .view-all-btn {
+        padding: 13px 26px;
+        border: 2px solid #ff6b35;
+        color: #ff6b35;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: 0.3s;
+        white-space: nowrap;
+      }
+      .view-all-btn:hover {
+        background: #ff6b35;
+        color: white;
+      }
+      /* ================= FOOD CARDS ================= */
+      .food-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 28px;
+      }
+      .food-card {
+        background: #fff;
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        transition: 0.35s;
+      }
+      .food-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      }
+      .food-image {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+      }
+      .food-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: 0.4s;
+      }
+      .food-card:hover img {
+        transform: scale(1.08);
+      }
+      .badge {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        background: #ff6b35;
+        color: white;
+        padding: 7px 15px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .heart-btn {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+      }
+      .food-content {
+        padding: 22px;
+      }
+      .food-content h3 {
+        font-size: 21px;
+        margin-bottom: 8px;
+      }
+      .rating {
+        color: #ff9800;
+        margin-bottom: 12px;
+        font-size: 14px;
+      }
+      .rating span {
+        color: #666;
+        font-size: 13px;
+        margin-left: 6px;
+      }
+      .food-content p {
+        line-height: 24px;
+        color: #666;
+        margin-bottom: 18px;
+        font-size: 14px;
+      }
+      .price-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .price-row h4 {
+        font-size: 24px;
+        color: #ff6b35;
+      }
+      .add-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #ff6b35;
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+        flex-shrink: 0;
+      }
+      .add-btn:hover {
+        background: #ff824f;
+      }
+      /* ================= WHY CHOOSE US ================= */
+      .why-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 70px;
+        align-items: center;
+        background: #fff7f2;
+      }
+      .why-left img {
+        width: 100%;
+        border-radius: 25px;
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
+      }
+      .why-right h2 {
+        font-size: 44px;
+        font-weight: 800;
+        line-height: 56px;
+        margin-bottom: 20px;
+      }
+      .why-right p {
+        font-size: 17px;
+        color: #666;
+        line-height: 30px;
+        margin-bottom: 35px;
+      }
+      .feature-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .feature-box {
+        display: flex;
+        gap: 18px;
+        padding: 22px;
+        background: white;
+        border-radius: 18px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        transition: 0.3s;
+      }
+      .feature-box:hover {
+        transform: translateY(-8px);
+      }
+      .feature-icon {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #fff2eb;
+        border-radius: 50%;
+        font-size: 28px;
+        flex-shrink: 0;
+      }
+      .feature-box h3 {
+        margin-bottom: 8px;
+        font-size: 18px;
+      }
+      .feature-box p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 24px;
+      }
+      /* ================= HOW IT WORKS ================= */
+      .how-section {
+        background: #fdf1e9;
+      }
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 28px;
+        margin-top: 50px;
+      }
+      .step-card {
+        background: #fff;
+        padding: 40px 25px 32px;
+        text-align: center;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+        transition: 0.35s;
+      }
+      .step-card:hover {
+        transform: translateY(-10px);
+      }
+      .step-icon-wrap {
+        position: relative;
+        width: 84px;
+        margin: 0 auto 22px;
+      }
+      .step-icon {
+        width: 84px;
+        height: 84px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #fff1ea;
+        font-size: 36px;
+      }
+      .step-number {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #ff6b35;
+        color: white;
+        font-size: 12px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .step-card h3 {
+        font-size: 20px;
+        margin-bottom: 12px;
+      }
+      .step-card p {
+        color: #666;
+        line-height: 26px;
+        font-size: 14px;
+      }
+      /* ================= TESTIMONIALS ================= */
+      .testimonial-section {
+        background: #fafafa;
+      }
+      .testimonial-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 28px;
+        margin-top: 50px;
+      }
+      .testimonial-card {
+        background: white;
+        padding: 32px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+        transition: 0.35s;
+        position: relative;
+      }
+      .testimonial-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+      }
+      .quote-mark {
+        position: absolute;
+        top: 22px;
+        right: 28px;
+        font-size: 40px;
+        color: #ffe0d1;
+        font-weight: 800;
+        font-family: Georgia, serif;
+        line-height: 1;
+      }
+      .testimonial-card p {
+        line-height: 27px;
+        color: #555;
+        font-size: 14.5px;
+        margin-bottom: 20px;
+      }
+      .stars {
+        font-size: 15px;
+        margin-bottom: 14px;
+        color: #ff9800;
+      }
+      .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .testimonial-author img {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      .testimonial-author h3 {
+        font-size: 16px;
+        margin-bottom: 2px;
+      }
+      .testimonial-author span {
+        color: #888;
+        font-size: 13px;
+      }
+      .testimonial-dots {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 40px;
+      }
+      .testimonial-dots .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #ffd9c2;
+      }
+      .testimonial-dots .dot.active {
+        background: #ff6b35;
+        width: 24px;
+        border-radius: 6px;
+      }
+      /* ================= CTA BANNER ================= */
+      .cta {
+        background: linear-gradient(135deg, #ff6b35, #ff824f);
+        padding: 0 8%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 30px;
+        color: white;
+        overflow: hidden;
+      }
+      .cta-visual {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+      }
+      .cta-bowl {
+        width: 170px;
+        height: 170px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        border: 5px solid rgba(255, 255, 255, 0.85);
+      }
+      .cta-text {
+        flex: 1;
+        padding: 40px 0;
+      }
+      .cta-text h2 {
+        font-size: 30px;
+        margin-bottom: 8px;
+        font-weight: 800;
+      }
+      .cta-text p {
+        font-size: 15px;
+        opacity: 0.95;
+      }
+      .cta .btn-primary {
+        background: white;
+        color: #ff6b35;
+        flex-shrink: 0;
+      }
+      .cta .btn-primary:hover {
+        background: #f3f3f3;
+      }
+      /* ================= FOOTER ================= */
+      footer {
+        background: #222;
+        color: white;
+        padding: 70px 8% 30px;
+      }
+      .footer-container {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 40px;
+      }
+      .footer-container h2 {
+        color: #ff6b35;
+        margin-bottom: 20px;
+      }
+      .footer-container h3 {
+        margin-bottom: 18px;
+      }
+      .footer-container ul {
+        list-style: none;
+      }
+      .footer-container li {
+        margin-bottom: 12px;
+      }
+      .footer-container a {
+        color: #ddd;
+        text-decoration: none;
+        transition: 0.3s;
+      }
+      .footer-container a:hover {
+        color: #ff6b35;
+      }
+      .footer-container p {
+        line-height: 28px;
+        color: #ddd;
+      }
+      footer hr {
+        margin: 35px 0 20px;
+        border: 0;
+        height: 1px;
+        background: #444;
+      }
+      .copyright {
+        text-align: center;
+        color: #aaa;
+      }
+      /* ================= RESPONSIVE ================= */
+      @media (max-width: 992px) {
+        .hero {
+          flex-direction: column;
+          padding: 100px 8% 60px;
+        }
+        .hero-left {
+          text-align: center;
+        }
+        .hero-left p {
+          max-width: none;
+        }
+        .hero-left h1 {
+          font-size: 44px;
+          line-height: 56px;
+        }
+        .hero-buttons {
+          justify-content: center;
+        }
+        .trust-badges {
+          justify-content: center;
+        }
+        .hero-right img {
+          height: 400px;
+        }
+        .rating-card {
+          left: 50%;
+          transform: translateX(-50%);
+          bottom: -30px;
+        }
+        .why-section {
+          grid-template-columns: 1fr;
+        }
+        .section-header-row {
+          justify-content: center;
+          text-align: center;
+        }
+        .section-header-row .section-title {
+          text-align: center;
+        }
+        .footer-container {
+          grid-template-columns: 1fr 1fr;
+        }
+        .cta {
+          flex-direction: column;
+          text-align: center;
+          padding: 40px 8%;
+        }
+        .cta-text {
+          padding: 0;
+        }
+      }
+      @media (max-width: 768px) {
+        header {
+          padding: 15px 5%;
+          flex-direction: column;
+          gap: 15px;
+        }
+        nav {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 18px;
+        }
+        .hero-left h1 {
+          font-size: 36px;
+          line-height: 46px;
+        }
+        .section-title h2 {
+          font-size: 32px;
+        }
+        .cta-text h2 {
+          font-size: 26px;
+        }
+        .footer-container {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+        .rating-card {
+          min-width: 190px;
+          padding: 14px 16px;
+        }
+      }
+      @media (max-width: 500px) {
+        .hero-left h1 {
+          font-size: 30px;
+          line-height: 40px;
+        }
+        .btn {
+          padding: 12px 22px;
+          font-size: 14px;
+        }
+        .trust-badges {
+          gap: 18px;
+        }
+        .food-content {
+          padding: 18px;
+        }
+        .food-content h3 {
+          font-size: 20px;
+        }
+        .price-row h4 {
+          font-size: 22px;
+        }
+        .cta-bowl {
+          width: 120px;
+          height: 120px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <div class="logo-icon">🍲</div>
+        Food<span>Mitra</span>
+      </div>
+      <nav>
+        <a href="/" class="active">Home</a>
+        <a href="/menu/">Menu</a>
+        <a href="#why">Why Us</a>
+        <a href="#contact">Contact us</a>
+        <a href="/accounts/register/">Become Cook</a>
+        <a href="/accounts/login/" class="login-btn">👤 Sign In</a>
+      </nav>
+    </header>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-left">
+        <h1>
+          Enjoy Fresh
+          <span>Homemade Food</span>
+          Delivered To Your Door
+        </h1>
+        <p>
+          FoodMitra connects food lovers with trusted home cooks near them.
+          Enjoy fresh, hygienic and affordable homemade meals every day.
+        </p>
+        <div class="hero-buttons">
+          <a href="/menu/" class="btn btn-primary"> Order Now → </a>
+          <a href="/accounts/register/" class="btn btn-secondary">
+            Become a Cook
+          </a>
+        </div>
+        <div class="trust-badges">
+          <div class="trust-badge">
+            <div class="trust-badge-icon">🛡️</div>
+            <span>100%<br />Hygienic</span>
+          </div>
+          <div class="trust-badge">
+            <div class="trust-badge-icon">✅</div>
+            <span>Verified<br />Home Cooks</span>
+          </div>
+          <div class="trust-badge">
+            <div class="trust-badge-icon">🚚</div>
+            <span>Fast<br />Delivery</span>
+          </div>
+          <div class="trust-badge">
+            <div class="trust-badge-icon">🏷️</div>
+            <span>Affordable<br />Prices</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <img
+          src="https://images.unsplash.com/photo-1734604638459-cccfd82bc311?q=80&w=1200&auto=format&fit=crop"
+        />
+        <div class="rating-card">
+          <div class="rating-avatars">
+            <img src="https://randomuser.me/api/portraits/women/45.jpg" />
+            <img src="https://randomuser.me/api/portraits/men/31.jpg" />
+            <img src="https://randomuser.me/api/portraits/women/68.jpg" />
+            <span class="stars-num">⭐ 4.8/5</span>
+          </div>
+          <h4>Loved by 10K+</h4>
+          <p>Happy Customers</p>
+        </div>
+      </div>
+    </section>
+    <!-- ================= FEATURED DISHES ================= -->
+    <section id="menu">
+      <div class="section-header-row">
+        <div class="section-title">
+          <span class="section-eyebrow">★ POPULAR DISHES</span>
+          <h2>Popular <span>Homemade</span> Dishes</h2>
+          <p>Freshly prepared by trusted home cooks near you.</p>
+        </div>
+        <a href="/menu/" class="view-all-btn">View All Dishes →</a>
+      </div>
+      <div class="food-grid">
+        <!-- CARD 1 -->
+        <div class="food-card">
+          <div class="food-image">
+            <img
+              src="https://images.unsplash.com/photo-1694849789325-914b71ab4075?w=900&q=80"
+              alt="Food"
+            />
+            <span class="badge">Best Seller</span>
+            <span class="heart-btn">♡</span>
+          </div>
+          <div class="food-content">
+            <h3>Masala Dosa</h3>
+            <div class="rating">
+              ⭐⭐⭐⭐⭐
+              <span>(4.9)</span>
+            </div>
+            <p>
+              Crispy golden dosa served with potato masala, coconut chutney and
+              hot sambar.
+            </p>
+            <div class="price-row">
+              <h4>₹80</h4>
+              <button class="add-btn">+</button>
+            </div>
+          </div>
+        </div>
+        <!-- CARD 2 -->
+        <div class="food-card">
+          <div class="food-image">
+            <img
+              src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=900&q=80"
+            />
+            <span class="badge">Popular</span>
+            <span class="heart-btn">♡</span>
+          </div>
+          <div class="food-content">
+            <h3>Chicken Biryani</h3>
+            <div class="rating">
+              ⭐⭐⭐⭐⭐
+              <span>(4.8)</span>
+            </div>
+            <p>
+              Aromatic basmati rice with spicy chicken, boiled egg and raita.
+            </p>
+            <div class="price-row">
+              <h4>₹180</h4>
+              <button class="add-btn">+</button>
+            </div>
+          </div>
+        </div>
+        <!-- CARD 3 -->
+        <div class="food-card">
+          <div class="food-image">
+            <img
+              src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=900&q=80"
+            />
+            <span class="badge">Healthy</span>
+            <span class="heart-btn">♡</span>
+          </div>
+          <div class="food-content">
+            <h3>Idli Sambar</h3>
+            <div class="rating">
+              ⭐⭐⭐⭐⭐
+              <span>(4.8)</span>
+            </div>
+            <p>Soft fluffy idlis served with homemade sambar and chutney.</p>
+            <div class="price-row">
+              <h4>₹60</h4>
+              <button class="add-btn">+</button>
+            </div>
+          </div>
+        </div>
+        <!-- CARD 4 -->
+        <div class="food-card">
+          <div class="food-image">
+            <img
+              src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=900&q=80"
+            />
+            <span class="badge">New</span>
+            <span class="heart-btn">♡</span>
+          </div>
+          <div class="food-content">
+            <h3>Butter Chicken</h3>
+            <div class="rating">
+              ⭐⭐⭐⭐⭐
+              <span>(5.0)</span>
+            </div>
+            <p>Creamy butter chicken served with soft butter naan.</p>
+            <div class="price-row">
+              <h4>₹220</h4>
+              <button class="add-btn">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ================= WHY CHOOSE US ================= -->
+    <section class="why-section" id="why">
+      <div class="why-left">
+        <img
+          src="https://images.unsplash.com/photo-1761839257845-9283b7d1b933?w=1200&q=80"
+          alt="Home Cook"
+        />
+      </div>
+      <div class="why-right">
+        <span class="section-eyebrow">WHY CHOOSE US</span>
+        <h2>
+          Delicious Homemade Food
+          <br />
+          Made With Love ❤️
+        </h2>
+        <p>
+          FoodMitra connects customers with trusted home cooks who prepare
+          fresh, hygienic and affordable meals every day.
+        </p>
+        <div class="feature-grid">
+          <div class="feature-box">
+            <div class="feature-icon">👩‍🍳</div>
+            <div>
+              <h3>Verified Home Cooks</h3>
+              <p>Every cook is verified before joining our platform.</p>
+            </div>
+          </div>
+          <div class="feature-box">
+            <div class="feature-icon">🥗</div>
+            <div>
+              <h3>Fresh Ingredients</h3>
+              <p>Daily prepared meals using fresh ingredients.</p>
+            </div>
+          </div>
+          <div class="feature-box">
+            <div class="feature-icon">🚚</div>
+            <div>
+              <h3>Fast Delivery</h3>
+              <p>Quick delivery directly to your doorstep.</p>
+            </div>
+          </div>
+          <div class="feature-box">
+            <div class="feature-icon">💰</div>
+            <div>
+              <h3>Affordable Prices</h3>
+              <p>Homemade food at reasonable prices.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ================= HOW IT WORKS ================= -->
+    <section class="how-section">
+      <div class="section-title">
+        <span class="section-eyebrow">★ HOW IT WORKS</span>
+        <h2>How <span>FoodMitra</span> Works</h2>
+        <p>Ordering delicious homemade food is quick and easy.</p>
+      </div>
+      <div class="steps">
+        <div class="step-card">
+          <div class="step-icon-wrap">
+            <div class="step-icon">📝</div>
+            <div class="step-number">01</div>
+          </div>
+          <h3>Create Account</h3>
+          <p>Sign up as a customer or home cook in just a few clicks.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-icon-wrap">
+            <div class="step-icon">🍛</div>
+            <div class="step-number">02</div>
+          </div>
+          <h3>Choose Your Food</h3>
+          <p>Browse homemade dishes prepared by verified home cooks.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-icon-wrap">
+            <div class="step-icon">💳</div>
+            <div class="step-number">03</div>
+          </div>
+          <h3>Place Your Order</h3>
+          <p>Securely pay online and confirm your order instantly.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-icon-wrap">
+            <div class="step-icon">🚚</div>
+            <div class="step-number">04</div>
+          </div>
+          <h3>Enjoy Your Meal</h3>
+          <p>Fresh homemade food is delivered right to your doorstep.</p>
+        </div>
+      </div>
+    </section>
+    <!-- ================= TESTIMONIALS ================= -->
+    <section class="testimonial-section">
+      <div class="section-title">
+        <span class="section-eyebrow">♥ CUSTOMER LOVE</span>
+        <h2>What Our <span>Customers</span> Say</h2>
+        <p>Thousands of happy customers enjoy homemade food every day.</p>
+      </div>
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <span class="quote-mark">"</span>
+          <p>
+            FoodMitra makes it so easy to find delicious homemade food near my
+            college. The meals are fresh, affordable, and remind me of home.
+          </p>
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <div class="testimonial-author">
+            <img
+              src="https://randomuser.me/api/portraits/women/45.jpg"
+              alt="Customer"
+            />
+            <div>
+              <h3>Priyanka</h3>
+              <span>Student</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <span class="quote-mark">"</span>
+          <p>
+            Excellent service! The food is always fresh, hygienic, and
+            delivered on time. Highly recommended.
+          </p>
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <div class="testimonial-author">
+            <img
+              src="https://randomuser.me/api/portraits/men/31.jpg"
+              alt="Customer"
+            />
+            <div>
+              <h3>Rahul Kumar</h3>
+              <span>Software Engineer</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <span class="quote-mark">"</span>
+          <p>
+            I love supporting local home cooks. FoodMitra has become my
+            favorite app for healthy homemade meals.
+          </p>
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <div class="testimonial-author">
+            <img
+              src="https://randomuser.me/api/portraits/women/68.jpg"
+              alt="Customer"
+            />
+            <div>
+              <h3>Priya Sharma</h3>
+              <span>Working Professional</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-dots">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+      </div>
+    </section>
+    <!-- ================= CALL TO ACTION ================= -->
+    <section class="cta">
+      <div class="cta-visual">
+        <img
+          class="cta-bowl"
+          src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=400&q=80"
+          alt="Homemade food bowl"
+        />
+      </div>
+      <div class="cta-text">
+        <h2>Hungry? Let's fix that! 🍜</h2>
+        <p>Order delicious homemade food from trusted home cooks near you.</p>
+      </div>
+      <a href="/menu/" class="btn btn-primary"> Order Now → </a>
+    </section>
+    <!-- ================= FOOTER ================= -->
+    <footer id="contact">
+      <div class="footer-container">
+        <div class="footer-about">
+          <h2>FoodMitra</h2>
+          <p>
+            Bringing delicious homemade food to your doorstep while empowering
+            passionate home cooks.
+          </p>
+        </div>
+        <div>
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/menu/">Menu</a></li>
+            <li><a href="#why">Why Us</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Account</h3>
+          <ul>
+            <li><a href="/accounts/login/">Login</a></li>
+            <li><a href="/accounts/register/">Register</a></li>
+            <li><a href="#">Orders</a></li>
+            <li><a href="#">Profile</a></li>
+          </ul>
+        </div>
+        <div>
+    <h3>Contact</h3>
+    <p>📍 Mysuru, Karnataka</p>
+    <p>📞 +91 7892903391</p>
+    <p>✉ support@foodmitra.in</p>
+    <br>
+    <a href="/contact/" style="display:inline-block;margin-top:10px;padding:10px 20px;background:#ff6b35;color:#fff;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">
+        📝 Lodge a Complaint
+    </a>
+</div>
+      </div>
+      <hr />
+      <p class="copyright">© 2026 FoodMitra. All Rights Reserved.</p>
+    </footer>
+  </body>
+</html>

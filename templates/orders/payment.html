@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment - FoodMitra</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #fff8f0;
+        font-family: "Poppins", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .navbar {
+        background: #ff6b35;
+        padding: 14px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .nav-brand {
+        color: #fff;
+        font-size: 20px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .page-wrap {
+        max-width: 520px;
+        margin: 40px auto;
+        padding: 0 20px 60px;
+        flex: 1;
+      }
+
+      .payment-card {
+        background: #fff;
+        border-radius: 20px;
+        padding: 36px;
+        box-shadow: 0 8px 32px rgba(255, 107, 53, 0.1);
+        animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+
+      .payment-icon {
+        text-align: center;
+        font-size: 56px;
+        margin-bottom: 14px;
+      }
+      .payment-title {
+        text-align: center;
+        font-size: 22px;
+        font-weight: 800;
+        color: #2c2c2a;
+        margin-bottom: 4px;
+      }
+      .payment-sub {
+        text-align: center;
+        font-size: 13px;
+        color: #888;
+        margin-bottom: 28px;
+      }
+
+      /* FOOD PREVIEW */
+      .food-preview {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: #fff8f0;
+        border-radius: 14px;
+        padding: 14px 16px;
+        margin-bottom: 20px;
+        border: 1px solid #ffe0d0;
+      }
+      .food-preview-img {
+        width: 60px;
+        height: 60px;
+        border-radius: 10px;
+        object-fit: cover;
+        flex-shrink: 0;
+      }
+      .food-preview-placeholder {
+        width: 60px;
+        height: 60px;
+        border-radius: 10px;
+        background: #ffe0d0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        flex-shrink: 0;
+      }
+      .food-preview-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: #2c2c2a;
+        margin-bottom: 3px;
+      }
+      .food-preview-cook {
+        font-size: 12px;
+        color: #888;
+      }
+
+      /* BILL */
+      .order-summary {
+        background: #fff8f0;
+        border-radius: 14px;
+        padding: 20px;
+        margin-bottom: 24px;
+        border: 1px solid #ffe0d0;
+      }
+      .summary-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #ff6b35;
+        margin-bottom: 16px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13.5px;
+        color: #555;
+        margin-bottom: 10px;
+        align-items: center;
+      }
+      .summary-row span:first-child {
+        color: #888;
+      }
+      .summary-row span:last-child {
+        font-weight: 600;
+        color: #2c2c2a;
+      }
+      .summary-divider {
+        height: 1px;
+        background: #ffe0d0;
+        margin: 14px 0;
+      }
+      .summary-total {
+        display: flex;
+        justify-content: space-between;
+        font-size: 18px;
+        font-weight: 800;
+        color: #ff6b35;
+        margin-top: 4px;
+      }
+      .free-tag {
+        color: #1d9e75 !important;
+        font-weight: 700 !important;
+      }
+      .delivery-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #e3f2fd;
+        color: #1565c0;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      /* PAYMENT METHODS */
+      .methods-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 12px;
+      }
+      .payment-methods {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-bottom: 24px;
+      }
+      .payment-method {
+        border: 1.5px solid #e8e8e8;
+        border-radius: 10px;
+        padding: 10px 6px;
+        text-align: center;
+        font-size: 11px;
+        color: #555;
+      }
+      .pm-icon {
+        font-size: 20px;
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      /* PAY BUTTON */
+      .pay-btn {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #ff7b32, #ff5b20);
+        color: #fff;
+        border: none;
+        border-radius: 14px;
+        font-size: 17px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.25s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-family: "Poppins", sans-serif;
+      }
+      .pay-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 24px rgba(255, 107, 53, 0.35);
+      }
+
+      .secure-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 16px;
+        font-size: 12px;
+        color: #888;
+      }
+      .razorpay-badge {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 12px;
+        color: #bbb;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a class="nav-brand" href="/">🍱 FoodMitra</a>
+    </nav>
+
+    <div class="page-wrap">
+      <div class="payment-card">
+        <div class="payment-icon">💳</div>
+        <div class="payment-title">Complete your payment</div>
+        <div class="payment-sub">Secure payment powered by Razorpay</div>
+
+        <!-- FOOD PREVIEW -->
+        <div class="food-preview">
+          {% if order.menu_item.photo %}
+          <img
+            src="{{ order.menu_item.photo.url }}"
+            class="food-preview-img"
+            alt="{{ order.menu_item.food_name }}"
+          />
+          {% else %}
+          <div class="food-preview-placeholder">🍛</div>
+          {% endif %}
+          <div>
+            <div class="food-preview-name">
+              {{ order.menu_item.food_name }} × {{ order.quantity }}
+            </div>
+            <div class="food-preview-cook">
+              👩‍🍳 by {{ order.cook.user.first_name }} {{order.cook.user.last_name }}
+            </div>
+          </div>
+        </div>
+
+        <!-- BILL DETAILS -->
+        <div class="order-summary">
+          <div class="summary-title">🧾 Bill Details</div>
+
+          <div class="summary-row">
+            <span>{{ order.menu_item.food_name }} × {{ order.quantity }}</span>
+            <span>₹{{ food_price }}</span>
+          </div>
+
+          <div class="summary-row">
+            <span>Delivery type</span>
+            <span>
+              {% if order.delivery_type == 'delivery' %}
+              <span class="delivery-badge">🏠 Home Delivery</span>
+              {% else %}
+              <span class="delivery-badge">🚶 Self Pickup</span>
+              {% endif %}
+            </span>
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <div class="summary-row">
+            <span>Item total</span>
+            <span>₹{{ food_price }}</span>
+          </div>
+
+          <div class="summary-row">
+            <span>Delivery charge</span>
+            {% if delivery_charge == 0 %}
+            <span class="free-tag">FREE</span>
+            {% else %}
+            <span>₹{{ delivery_charge }}</span>
+            {% endif %}
+          </div>
+
+          <div class="summary-row">
+            <span>Platform fee</span>
+            <span>₹{{ platform_fee }}</span>
+          </div>
+          <div class="summary-row">
+            <span>Platform fee</span>
+            <span>₹{{ platform_fee }}</span>
+          </div>
+          <div class="summary-row">
+            <span>Packing charge</span>
+            <span>₹{{ packing_charge }}</span>
+          </div>
+
+          <div class="summary-row">
+            <span>GST (5%)</span>
+            <span>₹{{ gst }}</span>
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <div class="summary-total">
+            <span>Total Amount</span>
+            <span>₹{{ total_price_display }}</span>
+          </div>
+        </div>
+
+        <!-- PAYMENT METHODS -->
+        <div class="methods-label">Accepted payment methods</div>
+        <div class="payment-methods">
+          <div class="payment-method"><span class="pm-icon">📱</span>UPI</div>
+          <div class="payment-method"><span class="pm-icon">💳</span>Card</div>
+          <div class="payment-method">
+            <span class="pm-icon">🏦</span>Net Banking
+          </div>
+          <div class="payment-method">
+            <span class="pm-icon">👛</span>Wallet
+          </div>
+        </div>
+
+        <!-- PAY BUTTON -->
+        <button class="pay-btn" onclick="payNow()">
+          🔒 Pay ₹{{ total_price_display }} Now
+        </button>
+
+        <div class="secure-badge">🔒 100% Secure payment · SSL encrypted</div>
+        <div class="razorpay-badge">Powered by Razorpay</div>
+      </div>
+    </div>
+
+    <!-- HIDDEN FORM FOR PAYMENT SUCCESS -->
+    <form id="paymentForm" method="POST" action="/orders/payment-success/">
+      {% csrf_token %}
+      <input
+        type="hidden"
+        id="razorpay_payment_id"
+        name="razorpay_payment_id"
+      />
+      <input
+        type="hidden"
+        id="razorpay_order_id"
+        name="razorpay_order_id"
+        value="{{ razorpay_order_id }}"
+      />
+      <input type="hidden" id="razorpay_signature" name="razorpay_signature" />
+    </form>
+
+    <script>
+      function payNow() {
+        var btn = document.querySelector(".pay-btn");
+        btn.textContent = "Opening payment...";
+        btn.disabled = true;
+
+        var options = {
+          key: "{{ razorpay_key_id }}",
+          amount: "{{ total_price }}",
+          currency: "INR",
+          name: "FoodMitra",
+          description: "{{ order.menu_item.food_name }}",
+          order_id: "{{ razorpay_order_id }}",
+          handler: function (response) {
+            document.getElementById("razorpay_payment_id").value =
+              response.razorpay_payment_id;
+            document.getElementById("razorpay_order_id").value =
+              response.razorpay_order_id;
+            document.getElementById("razorpay_signature").value =
+              response.razorpay_signature;
+            document.getElementById("paymentForm").submit();
+          },
+          prefill: {
+            name: "{{ user_name }}",
+            email: "{{ user_email }}",
+          },
+          theme: { color: "#ff6b35" },
+          modal: {
+            backdropclose: false,
+            escape: false,
+            ondismiss: function () {
+              btn.textContent = "🔒 Pay ₹{{ total_price_display }} Now";
+              btn.disabled = false;
+            },
+          },
+        };
+
+        try {
+          var rzp = new Razorpay(options);
+          rzp.on("payment.failed", function (response) {
+            window.location.href = "/orders/payment-failed/";
+          });
+          rzp.open();
+        } catch (e) {
+          console.log("Razorpay error:", e);
+          alert(
+            "Payment gateway error. Please check your internet connection and try again.",
+          );
+          btn.textContent = "🔒 Pay ₹{{ total_price_display }} Now";
+          btn.disabled = false;
+        }
+      }
+    </script>
+  </body>
+</html>

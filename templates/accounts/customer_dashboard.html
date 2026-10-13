@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Dashboard - FoodMitra</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --clr-bg: #fff8f0;
+        --clr-primary: #ff6b35;
+        --clr-primary-dark: #e85a2a;
+        --clr-gold: #f7931e;
+        --clr-ink: #2b2420;
+        --clr-muted: #8a8078;
+        --clr-border: #ffe0d0;
+        --clr-card: #ffffff;
+        --font-display: "Poppins", "Segoe UI", sans-serif;
+        --font-body: "Inter", "Segoe UI", sans-serif;
+      }
+      body {
+        background: var(--clr-bg);
+        font-family: var(--font-body);
+        color: var(--clr-ink);
+      }
+
+      /* ============ NAVBAR ============ */
+      .navbar {
+        background: var(--clr-primary);
+        padding: 14px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .nav-brand {
+        color: #fff;
+        font-family: var(--font-display);
+        font-size: 20px;
+        font-weight: 700;
+        text-decoration: none;
+        letter-spacing: -0.01em;
+      }
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .nav-user {
+        color: #fff;
+        font-size: 13.5px;
+        font-weight: 600;
+      }
+      .nav-logout {
+        padding: 8px 20px;
+        background: rgba(255, 255, 255, 0.95);
+        color: var(--clr-primary);
+        border: none;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none;
+        transition: transform 0.15s;
+      }
+      .nav-logout:hover {
+        transform: translateY(-1px);
+      }
+
+      /* ============ SIDEBAR ============ */
+      .sidebar {
+        width: 224px;
+        background: #fff;
+        height: calc(100vh - 60px);
+        position: fixed;
+        left: 0;
+        top: 60px;
+        border-right: 1px solid var(--clr-border);
+        padding: 18px 12px;
+      }
+      .sidebar-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 14px;
+        margin-bottom: 4px;
+        border-radius: 11px;
+        font-size: 13.5px;
+        font-weight: 600;
+        color: #6b6259;
+        cursor: pointer;
+        transition: all 0.18s;
+        text-decoration: none;
+      }
+      .sidebar-icon {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        border-radius: 9px;
+        background: #fdf1e9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14.5px;
+      }
+      .sidebar-item:hover {
+        background: #fff3ee;
+        color: var(--clr-primary);
+      }
+      .sidebar-item.active {
+        background: linear-gradient(135deg, #ff6b35, #f7931e);
+        color: #fff;
+        box-shadow: 0 6px 16px rgba(255, 107, 53, 0.28);
+      }
+      .sidebar-item.active .sidebar-icon {
+        background: rgba(255, 255, 255, 0.22);
+      }
+
+      /* ============ MAIN ============ */
+      .main-content {
+        margin-left: 224px;
+        padding: 30px 32px 50px;
+      }
+
+      /* WELCOME BANNER */
+      .welcome-banner {
+        position: relative;
+        background: linear-gradient(120deg, #ff6b35 0%, #f7931e 100%);
+        border-radius: 20px;
+        padding: 28px 32px;
+        color: #fff;
+        margin-bottom: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        overflow: hidden;
+        animation: fadeUp 0.5s ease both;
+      }
+      .welcome-banner::before {
+        content: "";
+        position: absolute;
+        top: -40%;
+        right: -6%;
+        width: 260px;
+        height: 260px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 50%;
+      }
+      .welcome-text {
+        position: relative;
+        z-index: 1;
+      }
+      .welcome-text h2 {
+        font-family: var(--font-display);
+        font-size: 23px;
+        font-weight: 700;
+        margin-bottom: 5px;
+        letter-spacing: -0.01em;
+      }
+      .welcome-text p {
+        font-size: 13.5px;
+        opacity: 0.92;
+        font-weight: 500;
+      }
+      .welcome-illustration {
+        position: relative;
+        z-index: 1;
+        width: 96px;
+        height: 76px;
+        filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.18));
+      }
+
+      /* STATS */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+      .stat-card {
+        background: var(--clr-card);
+        border-radius: 16px;
+        padding: 20px 22px;
+        border: 1px solid var(--clr-border);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        animation: fadeUp 0.5s ease both;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 24px rgba(255, 107, 53, 0.1);
+      }
+      .stat-icon {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+      }
+      .stat-icon.tone-orange {
+        background: #ffe9dd;
+      }
+      .stat-icon.tone-gold {
+        background: #fff1d6;
+      }
+      .stat-icon.tone-purple {
+        background: #f1e6f8;
+      }
+      .stat-num {
+        font-family: var(--font-display);
+        font-size: 25px;
+        font-weight: 700;
+        color: var(--clr-ink);
+        line-height: 1.1;
+      }
+      .stat-label {
+        font-size: 12px;
+        color: var(--clr-muted);
+        margin-top: 2px;
+        font-weight: 500;
+      }
+
+      /* QUICK ACTIONS */
+      .section-label {
+        font-family: var(--font-display);
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--clr-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 10px;
+      }
+      .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 26px;
+      }
+      .action-card {
+        background: var(--clr-card);
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+        border: 1px solid var(--clr-border);
+        cursor: pointer;
+        transition: all 0.25s;
+        text-decoration: none;
+        animation: fadeUp 0.5s ease both;
+      }
+      .action-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--clr-primary);
+        box-shadow: 0 12px 28px rgba(255, 107, 53, 0.16);
+      }
+      .action-icon-badge {
+        width: 58px;
+        height: 58px;
+        border-radius: 16px;
+        background: #fff3ee;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        margin: 0 auto 14px;
+      }
+      .action-title {
+        font-family: var(--font-display);
+        font-size: 14.5px;
+        font-weight: 700;
+        color: var(--clr-ink);
+        margin-bottom: 4px;
+      }
+      .action-desc {
+        font-size: 12px;
+        color: var(--clr-muted);
+      }
+
+      /* CARD (recent orders) */
+      .card {
+        background: var(--clr-card);
+        border-radius: 16px;
+        padding: 22px 24px;
+        border: 1px solid var(--clr-border);
+        margin-bottom: 20px;
+      }
+      .card-title {
+        font-family: var(--font-display);
+        font-size: 15.5px;
+        font-weight: 700;
+        color: var(--clr-ink);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .order-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 13px 0;
+        border-bottom: 1px solid #fdf1ea;
+      }
+      .order-item:last-child {
+        border-bottom: none;
+      }
+      .order-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .cook-avatar {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        border-radius: 11px;
+        background: linear-gradient(135deg, #ffd8c2, #ffb28a);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 14px;
+        color: #a6431a;
+      }
+      .order-food {
+        font-size: 13.5px;
+        font-weight: 700;
+        color: var(--clr-ink);
+      }
+      .order-cook {
+        font-size: 12px;
+        color: var(--clr-muted);
+        margin-top: 2px;
+      }
+      .order-status {
+        font-size: 11px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: 700;
+        text-transform: capitalize;
+        white-space: nowrap;
+      }
+      .status-pending {
+        background: #fff3e0;
+        color: #e65100;
+      }
+      .status-accepted {
+        background: #e1f5ee;
+        color: #0f6e56;
+      }
+      .status-preparing {
+        background: #e3f2fd;
+        color: #1565c0;
+      }
+      .status-ready {
+        background: #f3e5f5;
+        color: #6a1b9a;
+      }
+      .status-delivered {
+        background: #e1f5ee;
+        color: #0f6e56;
+      }
+      .status-rejected {
+        background: #fdecea;
+        color: #b71c1c;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 32px 20px 8px;
+      }
+      .empty-state p {
+        color: var(--clr-muted);
+        font-size: 13.5px;
+        margin-bottom: 16px;
+      }
+      .empty-cta {
+        display: inline-block;
+        padding: 11px 26px;
+        background: linear-gradient(135deg, #ff7b32, #ff5b20);
+        color: #fff;
+        border-radius: 11px;
+        text-decoration: none;
+        font-size: 13.5px;
+        font-weight: 700;
+        transition: all 0.2s;
+      }
+      .empty-cta:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 20px rgba(255, 107, 53, 0.32);
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(18px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 860px) {
+        .sidebar {
+          display: none;
+        }
+        .main-content {
+          margin-left: 0;
+          padding: 20px;
+        }
+        .stats-grid,
+        .quick-actions {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a class="nav-brand" href="/">🍱 FoodMitra</a>
+      <div class="nav-right">
+        {% if request.user.customerprofile.profile_photo %}
+        <img
+          src="{{ request.user.customerprofile.profile_photo.url }}"
+          style="
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff;
+          "
+        />
+        {% else %}
+        <div
+          style="
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff6b35;
+            font-weight: 700;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+          "
+        >
+          {{ request.user.first_name|first }}
+        </div>
+        {% endif %}
+        <span class="nav-user">{{ request.user.first_name }}</span>
+        <a class="nav-logout" href="/accounts/logout/">Logout</a>
+      </div>
+    </nav>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <a class="sidebar-item active" href="/accounts/dashboard/">
+        <span class="sidebar-icon">🏠</span> Dashboard
+      </a>
+      <a class="sidebar-item" href="/menu/">
+        <span class="sidebar-icon">🍛</span> Browse Food
+      </a>
+      <a class="sidebar-item" href="/orders/">
+        <span class="sidebar-icon">📋</span> My Orders
+      </a>
+      <a class="sidebar-item" href="/reviews/">
+        <span class="sidebar-icon">⭐</span> My Reviews
+      </a>
+      <a class="sidebar-item" href="/accounts/profile/">
+        <span class="sidebar-icon">👤</span> My Profile
+      </a>
+      <a class="sidebar-item" href="/accounts/logout/">
+        <span class="sidebar-icon">🚪</span> Logout
+      </a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <!-- WELCOME BANNER -->
+      <div class="welcome-banner">
+        <div class="welcome-text">
+          <h2>Welcome, {{ request.user.first_name }}! 👋</h2>
+          <p>What would you like to eat today?</p>
+        </div>
+        <svg
+          class="welcome-illustration"
+          viewBox="0 0 140 110"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <ellipse cx="70" cy="88" rx="62" ry="18" fill="rgba(0,0,0,0.18)" />
+          <ellipse cx="70" cy="80" rx="55" ry="15" fill="#ffffff" />
+          <ellipse cx="70" cy="74" rx="46" ry="11" fill="#ffe0c2" />
+          <circle cx="50" cy="70" r="7" fill="#ffce54" />
+          <circle cx="75" cy="66" r="6" fill="#f4a623" />
+          <circle cx="92" cy="72" r="6" fill="#ffce54" />
+          <path
+            d="M40,40 q0,-14 6,-20 M70,36 q0,-16 4,-24 M96,42 q4,-12 10,-18"
+            stroke="rgba(255,255,255,0.55)"
+            stroke-width="3"
+            fill="none"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon tone-orange">📋</div>
+          <div>
+            <div class="stat-num">{{ recent_orders|length }}</div>
+            <div class="stat-label">Total orders</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon tone-gold">🍛</div>
+          <div>
+            <div class="stat-num">{{ recent_orders|length }}</div>
+            <div class="stat-label">Food items tried</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon tone-purple">⭐</div>
+          <div>
+            <div class="stat-num">0</div>
+            <div class="stat-label">Reviews given</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK ACTIONS -->
+      <div class="section-label">Quick actions</div>
+      <div class="quick-actions">
+        <a class="action-card" href="/menu/">
+          <div class="action-icon-badge">🍛</div>
+          <div class="action-title">Browse Food</div>
+          <div class="action-desc">Find home cooked food near you</div>
+        </a>
+        <a class="action-card" href="/orders/">
+          <div class="action-icon-badge">📋</div>
+          <div class="action-title">My Orders</div>
+          <div class="action-desc">Track your current orders</div>
+        </a>
+        <a class="action-card" href="/reviews/">
+          <div class="action-icon-badge">⭐</div>
+          <div class="action-title">My Reviews</div>
+          <div class="action-desc">See your past reviews</div>
+        </a>
+      </div>
+
+      <!-- RECENT ORDERS -->
+      <div class="card">
+        <div class="card-title">📋 Recent Orders</div>
+        {% if recent_orders %} {% for order in recent_orders %}
+        <div class="order-item">
+          <div class="order-left">
+            <div class="cook-avatar">
+              {{ order.cook.user.first_name|first|upper }}
+            </div>
+            <div>
+              <div class="order-food">{{ order.menu_item.food_name }}</div>
+              <div class="order-cook">
+                👩‍🍳 {{ order.cook.user.first_name }} · ₹{{ order.total_price }}
+              </div>
+            </div>
+          </div>
+          <div>
+            <span class="order-status status-{{ order.status }}"
+              >{{ order.status }}</span
+            >
+          </div>
+        </div>
+        {% endfor %} {% else %}
+        <div class="empty-state">
+          <p>No orders yet. Browse food and place your first order!</p>
+          <a href="/menu/" class="empty-cta">Browse Food Now 🍛</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>

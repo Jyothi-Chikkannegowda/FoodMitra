@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Menu | FoodMitra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5f5f5; font-family: 'Poppins', sans-serif; }
+
+        .navbar { background: #ff6b35; padding: 16px 40px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 14px rgba(255,107,53,0.25); }
+        .nav-brand { color: #fff; font-size: 22px; font-weight: 800; text-decoration: none; }
+        .nav-right { display: flex; gap: 12px; }
+        .nav-btn { padding: 9px 22px; border-radius: 10px; font-size: 13px; font-weight: 700; text-decoration: none; font-family: 'Poppins', sans-serif; transition: all 0.2s; }
+        .nav-btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.7); }
+        .nav-btn-outline:hover { background: rgba(255,255,255,0.15); color: #fff; }
+        .nav-btn-solid { background: #fff; color: #ff6b35; border: 2px solid #fff; }
+        .nav-btn-solid:hover { background: #fff3ee; color: #ff6b35; transform: translateY(-1px); }
+
+        .page-wrap { max-width: 1100px; margin: 32px auto; padding: 0 24px 60px; }
+
+        .page-header { background: linear-gradient(135deg, #ff6b35, #f7931e); border-radius: 20px; padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; color: #fff; }
+        .page-header-title { font-size: 26px; font-weight: 800; margin-bottom: 4px; }
+        .page-header-sub { font-size: 14px; opacity: 0.88; }
+        .add-btn { padding: 12px 26px; background: #fff; color: #ff6b35; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
+        .add-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); color: #ff6b35; }
+
+        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+        .stat-card { background: #fff; border-radius: 14px; padding: 18px 20px; display: flex; align-items: center; gap: 14px; border: 1px solid #ffe0d0; transition: transform 0.2s; }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.07); }
+        .stat-icon { width: 48px; height: 48px; border-radius: 12px; background: #fff3ee; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+        .stat-num { font-size: 22px; font-weight: 800; color: #ff6b35; }
+        .stat-label { font-size: 12px; color: #888; margin-top: 2px; }
+
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 22px; }
+
+        .menu-card { background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.07); border: 1px solid #ffe0d0; transition: all 0.3s; }
+        .menu-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(255,107,53,0.15); }
+        .menu-card.unavailable { opacity: 0.75; border-color: #e0e0e0; background: #fafafa; }
+        .menu-card.unavailable:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+
+        .menu-img-wrap { position: relative; height: 200px; overflow: hidden; }
+        .menu-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+        .menu-card:hover .menu-img { transform: scale(1.06); }
+        .menu-card.unavailable .menu-img { filter: grayscale(60%); }
+
+        .unavailable-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; z-index: 2; }
+        .unavailable-label { background: #e24b4a; color: #fff; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 20px; }
+
+        .veg-badge { position: absolute; top: 12px; left: 12px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; z-index: 3; }
+        .veg-badge.veg { background: #e8f5e9; color: #2e7d32; }
+        .veg-badge.nonveg { background: #fdecea; color: #c62828; }
+
+        .avail-badge { position: absolute; top: 12px; right: 12px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; z-index: 3; }
+        .avail-badge.available { background: #e3f2fd; color: #1565c0; }
+        .avail-badge.unavailable-tag { background: #fdecea; color: #c62828; }
+
+        .menu-body { padding: 18px 20px; }
+        .menu-name { font-size: 18px; font-weight: 800; color: #1a1a1a; margin-bottom: 4px; }
+        .menu-card.unavailable .menu-name { color: #888; }
+        .menu-desc { font-size: 12px; color: #888; line-height: 1.6; margin-bottom: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        .menu-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+        .meta-item { background: #fafafa; border-radius: 10px; padding: 8px 12px; }
+        .meta-label { font-size: 10px; color: #aaa; font-weight: 600; text-transform: uppercase; margin-bottom: 2px; }
+        .meta-val { font-size: 13px; font-weight: 700; color: #1a1a1a; }
+        .meta-val.zero { color: #e24b4a; }
+
+        .menu-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 14px; border-top: 1px solid #fff3ee; }
+        .menu-price { font-size: 22px; font-weight: 900; color: #ff6b35; }
+        .menu-card.unavailable .menu-price { color: #aaa; }
+        .menu-date { font-size: 11px; color: #aaa; }
+
+        .action-row { display: flex; gap: 8px; margin-top: 14px; }
+        .btn-edit { flex: 1; padding: 10px; border: 2px solid #ff6b35; color: #ff6b35; background: #fff; border-radius: 10px; font-size: 13px; font-weight: 700; text-decoration: none; text-align: center; transition: all 0.2s; }
+        .btn-edit:hover { background: #ff6b35; color: #fff; }
+        .btn-delete { flex: 1; padding: 10px; border: 2px solid #e24b4a; color: #e24b4a; background: #fff; border-radius: 10px; font-size: 13px; font-weight: 700; text-decoration: none; text-align: center; transition: all 0.2s; }
+        .btn-delete:hover { background: #e24b4a; color: #fff; }
+
+        .empty-box { background: #fff; border-radius: 20px; border: 2px dashed #ffe0d0; padding: 70px 40px; text-align: center; color: #888; }
+        .empty-icon { font-size: 60px; margin-bottom: 16px; }
+        .empty-title { font-size: 20px; font-weight: 800; color: #1a1a1a; margin-bottom: 8px; }
+        .empty-sub { font-size: 14px; margin-bottom: 24px; }
+        .empty-btn { display: inline-block; padding: 13px 30px; background: #ff6b35; color: #fff; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/" class="nav-brand">🍱 FoodMitra</a>
+    <div class="nav-right">
+        <a href="/accounts/dashboard/" class="nav-btn nav-btn-outline">← Dashboard</a>
+        <a href="{% url 'post_menu' %}" class="nav-btn nav-btn-solid">+ Add New Item</a>
+    </div>
+</nav>
+
+<div class="page-wrap">
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <div>
+            <div class="page-header-title">🍽️ My Menu</div>
+            <div class="page-header-sub">Manage all your posted food items here</div>
+        </div>
+        <a href="{% url 'post_menu' %}" class="add-btn">+ Post New Item</a>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-icon">🍛</div>
+            <div>
+                <div class="stat-num">{{ menus|length }}</div>
+                <div class="stat-label">Total Menu Items</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div>
+                <div class="stat-num">{{ menus|length }}</div>
+                <div class="stat-label">Available Today</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div>
+                <div class="stat-num">{{ request.user.cookprofile.rating|default:"0.0" }}</div>
+                <div class="stat-label">Your Rating</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MENU GRID -->
+    {% if menus %}
+    <div class="menu-grid">
+        {% for menu in menus %}
+        <div class="menu-card {% if not menu.is_available %}unavailable{% endif %}">
+            <div class="menu-img-wrap">
+                {% if menu.photo %}
+                <img src="{{ menu.photo.url }}" class="menu-img" alt="{{ menu.food_name }}">
+                {% else %}
+                <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&q=80" class="menu-img" alt="Food">
+                {% endif %}
+
+                {% if not menu.is_available %}
+                <div class="unavailable-overlay">
+                    <span class="unavailable-label">❌ Unavailable</span>
+                </div>
+                {% endif %}
+
+                <span class="veg-badge {% if menu.is_veg %}veg{% else %}nonveg{% endif %}">
+                    {% if menu.is_veg %}🟢 Veg{% else %}🔴 Non-Veg{% endif %}
+                </span>
+                <span class="avail-badge {% if menu.is_available %}available{% else %}unavailable-tag{% endif %}">
+                    {% if menu.is_available %}✓ Available{% else %}✕ Unavailable{% endif %}
+                </span>
+            </div>
+            <div class="menu-body">
+                <div class="menu-name">{{ menu.food_name }}</div>
+                <div class="menu-desc">{{ menu.description|default:"Freshly prepared homemade food made with love." }}</div>
+
+                <div class="menu-meta">
+                    <div class="meta-item">
+                        <div class="meta-label">Cuisine</div>
+                        <div class="meta-val">{{ menu.get_cuisine_type_display }}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Quantity</div>
+                        <div class="meta-val {% if menu.quantity_available == 0 %}zero{% endif %}">
+                            {% if menu.quantity_available == 0 %}
+                            0 plates — Sold Out!
+                            {% else %}
+                            {{ menu.quantity_available }} plates
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-footer">
+                    <div class="menu-price">₹{{ menu.price }}</div>
+                    <div class="menu-date">📅 {{ menu.available_date }}</div>
+                </div>
+
+                <div class="action-row">
+                    <a href="{% url 'edit_menu' menu.id %}" class="btn-edit">✏️ Edit</a>
+                    <a href="{% url 'delete_menu' menu.id %}" class="btn-delete" onclick="return confirm('Delete this item?')">🗑️ Delete</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="empty-box">
+        <div class="empty-icon">🍽️</div>
+        <div class="empty-title">No Menu Items Yet!</div>
+        <div class="empty-sub">Start posting your delicious homemade food to receive orders!</div>
+        <a href="{% url 'post_menu' %}" class="empty-btn">+ Post Your First Item</a>
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

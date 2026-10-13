@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Menu - FoodMitra</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #fff8f0; font-family: 'Segoe UI', sans-serif; }
+
+        .navbar { background: #ff6b35; padding: 14px 32px; display: flex; align-items: center; justify-content: space-between; }
+        .nav-brand { color: #fff; font-size: 20px; font-weight: 600; text-decoration: none; }
+        .nav-back { padding: 7px 20px; background: #fff; color: #ff6b35; border: none; border-radius: 8px; font-size: 13px; font-weight: 500; text-decoration: none; }
+
+        .page-wrap { max-width: 700px; margin: 40px auto; padding: 0 20px 60px; }
+        .page-title { font-size: 24px; font-weight: 700; color: #2c2c2a; margin-bottom: 6px; }
+        .page-sub { font-size: 14px; color: #888; margin-bottom: 28px; }
+
+        .form-card { background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 8px 32px rgba(255,107,53,0.1); animation: slideUp 0.6s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+        .field-group { margin-bottom: 18px; }
+        .field-group label { font-size: 12px; font-weight: 600; color: #555; display: block; margin-bottom: 5px; }
+        .field-group input, .field-group select, .field-group textarea { width: 100%; padding: 11px 14px; border: 1.5px solid #e8e8e8; border-radius: 10px; font-size: 13px; color: #2c2c2a; transition: all 0.2s; background: #fff; }
+        .field-group input:focus, .field-group select:focus, .field-group textarea:focus { outline: none; border-color: #ff6b35; box-shadow: 0 0 0 3px rgba(255,107,53,0.12); }
+
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+        .photo-upload { border: 2px dashed #ffb89a; border-radius: 14px; padding: 32px; text-align: center; cursor: pointer; transition: all 0.2s; background: #fff8f0; }
+        .photo-upload:hover { border-color: #ff6b35; background: #fff3ee; }
+        .photo-upload input { display: none; }
+        .photo-icon { font-size: 40px; margin-bottom: 10px; }
+        .photo-text { font-size: 14px; color: #888; }
+        .photo-hint { font-size: 12px; color: #bbb; margin-top: 4px; }
+        .photo-preview { max-width: 100%; max-height: 200px; border-radius: 10px; margin-top: 14px; display: none; }
+
+        .veg-btn { flex: 1; padding: 12px; border: 1.5px solid #e8e8e8; border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.2s; font-size: 14px; font-weight: 500; }
+        .veg-toggle { display: flex; gap: 12px; }
+        .date-active { border-color: #ff6b35 !important; background: #fff3ee !important; color: #ff6b35 !important; }
+
+        .kitchen-notice { border-radius: 10px; padding: 14px 16px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .kitchen-veg { background: #e1f5ee; border: 1.5px solid #a5d6a7; color: #0f6e56; }
+        .kitchen-nonveg { background: #fdecea; border: 1.5px solid #f5c6c6; color: #c62828; }
+
+        .error-box { background: #ffeaea; border: 1px solid #f5c6c6; border-radius: 10px; padding: 12px 16px; font-size: 13px; color: #a32d2d; margin-bottom: 16px; }
+
+        .submit-btn { width: 100%; padding: 14px; background: #ff6b35; color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.25s; margin-top: 8px; }
+        .submit-btn:hover { background: #e55a28; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,107,53,0.35); }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a class="nav-brand" href="/">🍱 FoodMitra</a>
+    <a class="nav-back" href="/accounts/dashboard/">← Back to Dashboard</a>
+</nav>
+
+<div class="page-wrap">
+    <div class="page-title">🍛 Post Today's Menu</div>
+    <div class="page-sub">Share what you are cooking and start receiving orders!</div>
+
+    <div class="form-card">
+        {% if error %}
+        <div class="error-box">⚠️ {{ error }}</div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data" id="menuForm">
+            {% csrf_token %}
+            <input type="hidden" name="available_date" id="availableDateInput">
+            <input type="hidden" name="is_preorder" id="isPreorderInput" value="">
+
+            <!-- FOOD PHOTO -->
+            <div class="field-group">
+                <label>Food Photo</label>
+                <div class="photo-upload" onclick="document.getElementById('photoInput').click()">
+                    <input type="file" id="photoInput" name="photo" accept="image/*" onchange="previewPhoto(this)">
+                    <div class="photo-icon">📸</div>
+                    <div class="photo-text">Click to upload food photo</div>
+                    <div class="photo-hint">JPG, PNG up to 5MB</div>
+                    <img id="photoPreview" class="photo-preview">
+                </div>
+            </div>
+
+            <!-- FOOD NAME -->
+            <div class="field-group">
+                <label>Food Name</label>
+                <input type="text" name="food_name" placeholder="e.g. Dal Rice, Idli Sambar, Chicken Biryani" required>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="field-group">
+                <label>Description</label>
+                <textarea name="description" rows="3" placeholder="Describe your food — ingredients, taste, special preparation..."></textarea>
+            </div>
+
+            <!-- PRICE AND QUANTITY -->
+            <div class="field-row">
+                <div class="field-group">
+                    <label>Price (₹10 — ₹500)</label>
+                    <input type="number" name="price" placeholder="e.g. 80" min="10" max="500" required>
+                    <div style="font-size:11px;color:#888;margin-top:3px;">Min ₹10 — Max ₹1500</div>
+                </div>
+                <div class="field-group">
+                    <label>Quantity Available (1 — 50)</label>
+                    <input type="number" name="quantity" placeholder="e.g. 10" min="1" max="50" required>
+                    <div style="font-size:11px;color:#888;margin-top:3px;">Min 1 — Max 50 plates</div>
+                </div>
+            </div>
+
+            <!-- CUISINE TYPE -->
+            <div class="field-group">
+                <label>Cuisine Type</label>
+                <select name="cuisine_type" required>
+                    <option value="">-- Select cuisine --</option>
+                    <option value="north_indian">North Indian</option>
+                    <option value="south_indian">South Indian</option>
+                    <option value="chinese">Chinese</option>
+                    <option value="continental">Continental</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <!-- FOOD TYPE - locked to kitchen type -->
+            <div class="field-group">
+                <label>Food Type</label>
+                {% if cook.kitchen_type == 'veg' %}
+                <div class="kitchen-notice kitchen-veg">
+                    🌱 Pure Veg Kitchen — All your food items are automatically Vegetarian!
+                </div>
+                {% else %}
+                <div class="kitchen-notice kitchen-nonveg">
+                    🍖 Non-Veg Kitchen — All your food items are automatically Non-Vegetarian!
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- AVAILABLE DATE -->
+            <div class="field-group">
+                <label>When is this food available?</label>
+                <div class="veg-toggle">
+                    <div class="veg-btn" id="todayBtn" onclick="selectDate('today')">🍛 Today</div>
+                    <div class="veg-btn" id="tomorrowBtn" onclick="selectDate('tomorrow')">📅 Tomorrow (Pre-order)</div>
+                </div>
+                <div style="font-size:11px;color:#888;margin-top:6px;" id="selectedDateLabel"></div>
+            </div>
+
+            <button type="submit" class="submit-btn">Post Menu Item 🍛</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function getFormattedDate(d) {
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return yyyy + '-' + mm + '-' + dd;
+}
+
+function getDisplayDate(d) {
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return d.toLocaleDateString('en-IN', options);
+}
+
+function selectDate(day) {
+    const todayBtn = document.getElementById('todayBtn');
+    const tomorrowBtn = document.getElementById('tomorrowBtn');
+    const dateInput = document.getElementById('availableDateInput');
+    const preorderInput = document.getElementById('isPreorderInput');
+    const label = document.getElementById('selectedDateLabel');
+
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
+
+    if (day === 'today') {
+        todayBtn.classList.add('date-active');
+        tomorrowBtn.classList.remove('date-active');
+        dateInput.value = getFormattedDate(today);
+        preorderInput.value = '';
+        label.textContent = 'Selected: ' + getDisplayDate(today);
+        label.style.color = '#1D9E75';
+    } else {
+        tomorrowBtn.classList.add('date-active');
+        todayBtn.classList.remove('date-active');
+        dateInput.value = getFormattedDate(tomorrow);
+        preorderInput.value = 'on';
+        label.textContent = 'Pre-order for: ' + getDisplayDate(tomorrow);
+        label.style.color = '#ff6b35';
+    }
+}
+
+function previewPhoto(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById('photoPreview');
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+
+</body>
+</html>

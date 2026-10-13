@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Delete Menu</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #fff8f0;
+        font-family: Arial;
+      }
+      .card {
+        max-width: 500px;
+        margin: 100px auto;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      }
+      .card-header {
+        background: #dc3545;
+        color: white;
+        font-size: 24px;
+        text-align: center;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="card-header">🗑 Delete Menu</div>
+      <div class="card-body text-center">
+        {% if menu.photo %}
+        <img
+          src="{{ menu.photo.url }}"
+          style="
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+          "
+        />
+        <br /><br />
+        {% endif %}
+        <h4>{{ menu.food_name }}</h4>
+        <p>Price : ₹{{ menu.price }}</p>
+        <p>Are you sure you want to delete this menu item?</p>
+        <form method="POST">
+          {% csrf_token %}
+          <button class="btn btn-danger">Yes Delete</button>
+          <a href="{% url 'dashboard' %}" class="btn btn-secondary"> Cancel </a>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

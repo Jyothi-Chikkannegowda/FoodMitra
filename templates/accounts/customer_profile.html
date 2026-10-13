@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - FoodMitra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --clr-primary: #ff6b35;
+            --clr-ink: #2b2420;
+            --clr-muted: #8a8078;
+            --clr-border: #ffe0d0;
+            --font-display: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+        body { background: #fff8f0; font-family: var(--font-body); color: var(--clr-ink); }
+
+        .navbar { background: var(--clr-primary); padding: 14px 32px; display: flex; align-items: center; justify-content: space-between; }
+        .nav-brand { color: #fff; font-family: var(--font-display); font-size: 20px; font-weight: 700; text-decoration: none; }
+        .nav-back { padding: 8px 20px; background: #fff; color: var(--clr-primary); border: none; border-radius: 9px; font-size: 13px; font-weight: 700; text-decoration: none; }
+
+        .page-wrap { max-width: 720px; margin: 34px auto; padding: 0 20px 60px; }
+
+        .page-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+        .page-icon-badge { width: 48px; height: 48px; border-radius: 14px; background: #ffe9dd; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+        .page-title { font-family: var(--font-display); font-size: 23px; font-weight: 700; }
+        .page-sub { font-size: 13px; color: var(--clr-muted); margin-top: 2px; }
+
+        .profile-card { background: #fff; border-radius: 20px; padding: 30px 32px; border: 1px solid var(--clr-border); margin-bottom: 20px; }
+
+        .profile-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 26px; flex-wrap: wrap; gap: 16px; }
+        .profile-header-left { display: flex; align-items: center; gap: 20px; }
+        .profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #ffd8c2, #ffb28a); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 30px; color: #a6431a; font-weight: 700; overflow: hidden; border: 3px solid #fff; box-shadow: 0 0 0 3px var(--clr-primary); }
+        .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-name { font-family: var(--font-display); font-size: 21px; font-weight: 700; }
+        .profile-username { font-size: 13.5px; color: var(--clr-muted); margin-top: 2px; }
+        .customer-badge { display: inline-flex; align-items: center; gap: 5px; background: #e6f1fb; color: #185fa5; padding: 5px 13px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 9px; }
+
+        .edit-btn { padding: 10px 20px; background: linear-gradient(135deg, #ff7b32, #ff5b20); color: #fff; border: none; border-radius: 11px; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.2s; }
+        .edit-btn:hover { color: #fff; transform: translateY(-1px); box-shadow: 0 8px 20px rgba(255,107,53,0.32); }
+
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .info-item { background: #fff8f0; border: 1px solid var(--clr-border); border-radius: 13px; padding: 15px 16px; }
+        .info-label { font-size: 10.5px; color: var(--clr-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+        .info-value { font-size: 14px; color: var(--clr-ink); font-weight: 600; }
+
+        .edit-form { display: none; background: #fff; border-radius: 20px; padding: 30px 32px; border: 1px solid var(--clr-border); margin-bottom: 20px; }
+        .edit-form.show { display: block; animation: fadeUp 0.4s ease both; }
+        .edit-form-title { font-family: var(--font-display); font-size: 17px; font-weight: 700; margin-bottom: 22px; }
+
+        .field-group { margin-bottom: 17px; }
+        .field-group label { font-size: 12px; font-weight: 700; color: #555; display: block; margin-bottom: 6px; }
+        .field-group input, .field-group textarea { width: 100%; padding: 11px 14px; border: 1.5px solid #e8e8e8; border-radius: 10px; font-size: 13.5px; font-family: var(--font-body); color: var(--clr-ink); transition: all 0.2s; background: #fff; outline: none; }
+        .field-group textarea { resize: vertical; }
+        .field-group input:focus, .field-group textarea:focus { border-color: var(--clr-primary); box-shadow: 0 0 0 3px rgba(255,107,53,0.12); }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+        .photo-preview-wrap { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+        .photo-preview-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #ffd8c2, #ffb28a); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 22px; color: #a6431a; font-weight: 700; overflow: hidden; border: 2px solid var(--clr-primary); }
+        .photo-preview-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .photo-hint { font-size: 11px; color: var(--clr-muted); margin-top: 5px; }
+
+        .save-btn { width: 100%; padding: 13px; background: linear-gradient(135deg, #ff7b32, #ff5b20); color: #fff; border: none; border-radius: 12px; font-size: 14.5px; font-weight: 700; cursor: pointer; transition: all 0.25s; margin-top: 8px; font-family: var(--font-body); }
+        .save-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(255,107,53,0.32); }
+        .cancel-btn { width: 100%; padding: 11px; background: #fff; color: var(--clr-primary); border: 1.5px solid var(--clr-primary); border-radius: 12px; font-size: 13.5px; font-weight: 700; cursor: pointer; margin-top: 10px; font-family: var(--font-body); transition: all 0.15s; }
+        .cancel-btn:hover { background: #fff3ee; }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a class="nav-brand" href="/">🍱 FoodMitra</a>
+    <a class="nav-back" href="/accounts/dashboard/">← Dashboard</a>
+</nav>
+
+<div class="page-wrap">
+    <div class="page-header">
+        <div class="page-icon-badge">👤</div>
+        <div>
+            <div class="page-title">My Profile</div>
+            <div class="page-sub">Manage your personal information</div>
+        </div>
+    </div>
+
+    <!-- PROFILE CARD -->
+    <div class="profile-card">
+        <div class="profile-header">
+            <div class="profile-header-left">
+                <div class="profile-avatar">
+                    {% if customer_profile.profile_photo %}
+                    <img src="{{ customer_profile.profile_photo.url }}" alt="Profile">
+                    {% else %}
+                    {{ request.user.first_name|first }}
+                    {% endif %}
+                </div>
+                <div>
+                    <div class="profile-name">{{ request.user.first_name }} {{ request.user.last_name }}</div>
+                    <div class="profile-username">@{{ request.user.username }}</div>
+                    <div class="customer-badge">🛒 Customer</div>
+                </div>
+            </div>
+            <a class="edit-btn" onclick="toggleEdit()" href="#">✏️ Edit Profile</a>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">Email</div>
+                <div class="info-value">{{ request.user.email }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Username</div>
+                <div class="info-value">{{ request.user.username }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Member Since</div>
+                <div class="info-value">{{ request.user.date_joined|date:"d M Y" }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Account Type</div>
+                <div class="info-value">Customer 🛒</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Phone</div>
+                <div class="info-value">{{ customer_profile.phone|default:"Not provided" }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Address</div>
+                <div class="info-value">{{ customer_profile.address|default:"Not provided" }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT FORM -->
+    <div class="edit-form" id="editForm">
+        <div class="edit-form-title">✏️ Edit Profile</div>
+        <form method="POST" action="/accounts/update-profile/" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="field-group">
+                <label>Profile Photo</label>
+                <div class="photo-preview-wrap">
+                    <div class="photo-preview-avatar" id="photoPreviewAvatar">
+                        {% if customer_profile.profile_photo %}
+                        <img src="{{ customer_profile.profile_photo.url }}" id="photoPreviewImg" alt="Profile">
+                        {% else %}
+                        <span id="photoPreviewInitial">{{ request.user.first_name|first }}</span>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <input type="file" name="profile_photo" accept="image/*" onchange="previewNewPhoto(this)" style="font-size:13px;">
+                        <div class="photo-hint">JPG or PNG, max 5MB</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field-row">
+                <div class="field-group">
+                    <label>First Name</label>
+                    <input type="text" name="first_name" value="{{ request.user.first_name }}" required>
+                </div>
+                <div class="field-group">
+                    <label>Last Name</label>
+                    <input type="text" name="last_name" value="{{ request.user.last_name }}">
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label>Email Address</label>
+                <input type="email" name="email" value="{{ request.user.email }}">
+            </div>
+
+            <div class="field-group">
+                <label>Phone Number</label>
+                <input type="text" name="phone" value="{{ customer_profile.phone|default:'' }}" placeholder="Enter 10-digit phone number">
+            </div>
+
+            <div class="field-group">
+                <label>Address</label>
+                <textarea name="address" rows="3" placeholder="Enter your full address">{{ customer_profile.address|default:'' }}</textarea>
+            </div>
+
+            <button type="submit" class="save-btn">✅ Save Changes</button>
+            <button type="button" class="cancel-btn" onclick="toggleEdit()">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function toggleEdit() {
+    const form = document.getElementById('editForm');
+    form.classList.toggle('show');
+    if (form.classList.contains('show')) {
+        form.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+function previewNewPhoto(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const avatar = document.getElementById('photoPreviewAvatar');
+            avatar.innerHTML = '<img src="' + e.target.result + '" style="width:100%;height:100%;object-fit:cover;" alt="Preview">';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+
+</body>
+</html>

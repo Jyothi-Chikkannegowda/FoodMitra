@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - FoodMitra</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #fff8f0;
+        font-family: "Segoe UI", sans-serif;
+      }
+
+      .navbar {
+        background: #ff6b35;
+        padding: 14px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .nav-brand {
+        color: #fff;
+        font-size: 20px;
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .nav-user {
+        color: #fff;
+        font-size: 14px;
+      }
+      .nav-logout {
+        padding: 7px 20px;
+        background: #fff;
+        color: #ff6b35;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      .sidebar {
+        width: 220px;
+        background: #fff;
+        height: calc(100vh - 56px);
+        position: fixed;
+        left: 0;
+        top: 56px;
+        border-right: 1px solid #ffe0d0;
+        padding: 20px 0;
+      }
+      .sidebar-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 20px;
+        font-size: 14px;
+        color: #555;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+      }
+      .sidebar-item:hover {
+        background: #fff8f0;
+        color: #ff6b35;
+      }
+      .sidebar-item.active {
+        background: #fff3ee;
+        color: #ff6b35;
+        border-right: 3px solid #ff6b35;
+        font-weight: 600;
+      }
+
+      .main-content {
+        margin-left: 220px;
+        padding: 28px;
+      }
+
+      .welcome-banner {
+        background: linear-gradient(135deg, #2c2c2a, #444441);
+        border-radius: 16px;
+        padding: 24px 28px;
+        color: #fff;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        animation: fadeUp 0.6s ease both;
+      }
+      .welcome-text h2 {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+      .welcome-text p {
+        font-size: 14px;
+        opacity: 0.88;
+      }
+      .welcome-emoji {
+        font-size: 60px;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 14px;
+        margin-bottom: 24px;
+      }
+      .stat-card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 18px;
+        border: 1px solid #ffe0d0;
+        animation: fadeUp 0.6s ease both;
+        transition: transform 0.2s;
+      }
+      .stat-card:hover {
+        transform: translateY(-4px);
+      }
+      .stat-icon {
+        font-size: 26px;
+        margin-bottom: 8px;
+      }
+      .stat-num {
+        font-size: 24px;
+        font-weight: 700;
+        color: #ff6b35;
+      }
+      .stat-label {
+        font-size: 11px;
+        color: #888;
+        margin-top: 3px;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 24px;
+      }
+      .card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 20px;
+        border: 1px solid #ffe0d0;
+      }
+      .card-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #2c2c2a;
+        margin-bottom: 16px;
+      }
+
+      .cook-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #fff3ee;
+      }
+      .cook-item:last-child {
+        border-bottom: none;
+      }
+      .cook-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #ff6b35;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: #fff;
+        font-weight: 700;
+        margin-right: 10px;
+      }
+      .cook-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: #2c2c2a;
+      }
+      .cook-address {
+        font-size: 11px;
+        color: #888;
+        margin-top: 2px;
+      }
+      .cook-aadhaar {
+        font-size: 11px;
+        color: #888;
+      }
+
+      .verify-btn {
+        padding: 6px 16px;
+        background: #ff6b35;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .verify-btn:hover {
+        background: #e55a28;
+      }
+      .verified-tag {
+        padding: 5px 12px;
+        background: #e1f5ee;
+        color: #0f6e56;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      .order-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #fff3ee;
+      }
+      .order-item:last-child {
+        border-bottom: none;
+      }
+      .order-food {
+        font-size: 13px;
+        font-weight: 600;
+        color: #2c2c2a;
+      }
+      .order-meta {
+        font-size: 11px;
+        color: #888;
+        margin-top: 2px;
+      }
+      .order-price {
+        font-size: 13px;
+        font-weight: 600;
+        color: #ff6b35;
+      }
+      .status-badge {
+        padding: 3px 8px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 500;
+      }
+      .status-pending {
+        background: #fff3e0;
+        color: #e65100;
+      }
+      .status-accepted {
+        background: #e3f2fd;
+        color: #1565c0;
+      }
+      .status-preparing {
+        background: #f3e5f5;
+        color: #6a1b9a;
+      }
+      .status-ready {
+        background: #e8f5e9;
+        color: #2e7d32;
+      }
+      .status-delivered {
+        background: #e1f5ee;
+        color: #0f6e56;
+      }
+      .status-rejected {
+        background: #ffeaea;
+        color: #a32d2d;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a class="nav-brand" href="/">🍱 FoodMitra Admin</a>
+      <div class="nav-right">
+        <span class="nav-user">🛡️ {{ request.user.username }}</span>
+        <a class="nav-logout" href="/accounts/logout/">Logout</a>
+      </div>
+    </nav>
+
+    <div class="sidebar">
+      <a class="sidebar-item active" href="/accounts/admin-dashboard/">
+        <span>🏠</span> Dashboard
+      </a>
+      <a class="sidebar-item" href="/admin/"> <span>⚙️</span> Django Admin </a>
+      <a class="sidebar-item" href="/menu/"> <span>🍛</span> View Menus </a>
+      <a class="sidebar-item" href="/accounts/logout/">
+        <span>🚪</span> Logout
+      </a>
+    </div>
+
+    <div class="main-content">
+      <!-- WELCOME -->
+      <div class="welcome-banner">
+        <div class="welcome-text">
+          <h2>Admin Dashboard 🛡️</h2>
+          <p>Manage cooks, orders and platform analytics</p>
+        </div>
+        <div class="welcome-emoji">📊</div>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-num">{{ total_users }}</div>
+          <div class="stat-label">Total users</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">👩‍🍳</div>
+          <div class="stat-num">{{ total_cooks }}</div>
+          <div class="stat-label">Home cooks</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🛒</div>
+          <div class="stat-num">{{ total_customers }}</div>
+          <div class="stat-label">Customers</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📋</div>
+          <div class="stat-num">{{ total_orders }}</div>
+          <div class="stat-label">Total orders</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-num">₹{{ total_earnings }}</div>
+          <div class="stat-label">Total earnings</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <!-- PENDING VERIFICATION -->
+        <div class="card">
+          <div class="card-title">
+            ⏳ Pending Verification ({{ pending_cooks|length }})
+          </div>
+          {% if pending_cooks %} {% for cook in pending_cooks %}
+          <div class="cook-item">
+            <div style="display: flex; align-items: center">
+              <div class="cook-avatar">{{ cook.user.first_name|first }}</div>
+              <div>
+                <div class="cook-name">
+                  {{ cook.user.first_name }} {{ cook.user.last_name }}
+                </div>
+                <div class="cook-address">📍 {{ cook.home_address }}</div>
+                <div class="cook-aadhaar">🪪 {{ cook.aadhaar_number }}</div>
+              </div>
+            </div>
+            <a href="/accounts/verify-cook/{{ cook.id }}/" class="verify-btn"
+              >✅ Verify</a
+            >
+          </div>
+          {% endfor %} {% else %}
+          <p
+            style="
+              color: #888;
+              font-size: 13px;
+              text-align: center;
+              padding: 20px;
+            "
+          >
+            No pending verifications!
+          </p>
+          {% endif %}
+        </div>
+
+        <!-- VERIFIED COOKS -->
+        <div class="card">
+          <div class="card-title">
+            ✅ Verified Cooks ({{ verified_cooks|length }})
+          </div>
+          {% if verified_cooks %} {% for cook in verified_cooks %}
+          <div class="cook-item">
+            <div style="display: flex; align-items: center">
+              <div class="cook-avatar">{{ cook.user.first_name|first }}</div>
+              <div>
+                <div class="cook-name">
+                  {{ cook.user.first_name }} {{ cook.user.last_name }}
+                </div>
+                <div class="cook-address">{{ cook.speciality }}</div>
+              </div>
+            </div>
+            <span class="verified-tag">✅ Verified</span>
+          </div>
+          {% endfor %} {% else %}
+          <p
+            style="
+              color: #888;
+              font-size: 13px;
+              text-align: center;
+              padding: 20px;
+            "
+          >
+            No verified cooks yet!
+          </p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- RECENT ORDERS -->
+      <div class="card">
+        <div class="card-title">📋 Recent Orders</div>
+        {% if recent_orders %} {% for order in recent_orders %}
+        <div class="order-item">
+          <div>
+            <div class="order-food">{{ order.menu_item.food_name }}</div>
+            <div class="order-meta">
+              {{ order.customer.first_name }} → {{ order.cook.user.first_name }}
+              · {{ order.order_time|date:"d M Y" }}
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px">
+            <span class="status-badge status-{{ order.status }}"
+              >{{ order.status|capfirst }}</span
+            >
+            <span class="order-price">₹{{ order.total_price }}</span>
+          </div>
+        </div>
+        {% endfor %} {% else %}
+        <p
+          style="
+            color: #888;
+            font-size: 13px;
+            text-align: center;
+            padding: 20px;
+          "
+        >
+          No orders yet!
+        </p>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>

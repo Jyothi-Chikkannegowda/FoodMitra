@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place Order - FoodMitra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #fff8f0; font-family: 'Poppins', sans-serif; }
+
+        .navbar { background: #ff6b35; padding: 14px 32px; display: flex; align-items: center; justify-content: space-between; }
+        .nav-brand { color: #fff; font-size: 20px; font-weight: 700; text-decoration: none; }
+        .nav-back { padding: 7px 20px; background: #fff; color: #ff6b35; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; }
+
+        .page-wrap { max-width: 600px; margin: 40px auto; padding: 0 20px 60px; }
+
+        .food-card { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 32px rgba(255,107,53,0.1); margin-bottom: 20px; animation: slideUp 0.6s cubic-bezier(0.34,1.56,0.64,1) both; }
+        .food-img { width: 100%; height: 220px; object-fit: cover; }
+        .food-img-placeholder { width: 100%; height: 220px; background: #fff3ee; display: flex; align-items: center; justify-content: center; font-size: 80px; }
+        .food-details { padding: 20px; }
+        .food-name { font-size: 22px; font-weight: 700; color: #2c2c2a; margin-bottom: 6px; }
+        .food-cook { font-size: 14px; color: #888; margin-bottom: 8px; }
+        .food-desc { font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 14px; }
+        .food-meta { display: flex; gap: 12px; flex-wrap: wrap; }
+        .meta-tag { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+        .tag-price { background: #fff3ee; color: #ff6b35; }
+        .tag-veg { background: #e1f5ee; color: #0f6e56; }
+        .tag-nonveg { background: #ffeaea; color: #a32d2d; }
+        .tag-cuisine { background: #e3f2fd; color: #1565c0; }
+        .tag-qty { background: #fff8e1; color: #e65100; }
+
+        .order-form { background: #fff; border-radius: 20px; padding: 28px; box-shadow: 0 8px 32px rgba(255,107,53,0.1); animation: slideUp 0.6s 0.2s cubic-bezier(0.34,1.56,0.64,1) both; }
+        .form-title { font-size: 18px; font-weight: 700; color: #2c2c2a; margin-bottom: 20px; }
+
+        .field-group { margin-bottom: 18px; }
+        .field-group label { font-size: 12px; font-weight: 600; color: #555; display: block; margin-bottom: 6px; }
+        .field-group input { width: 100%; padding: 11px 14px; border: 1.5px solid #e8e8e8; border-radius: 10px; font-size: 14px; color: #2c2c2a; font-family: 'Poppins', sans-serif; transition: all 0.2s; }
+        .field-group input:focus { outline: none; border-color: #ff6b35; box-shadow: 0 0 0 3px rgba(255,107,53,0.12); }
+
+        .delivery-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .delivery-btn { padding: 16px; border: 1.5px solid #e8e8e8; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .delivery-btn:hover { border-color: #ff6b35; }
+        .delivery-btn.active { border-color: #ff6b35; background: #fff3ee; }
+        .delivery-icon { font-size: 28px; display: block; margin-bottom: 6px; }
+        .delivery-label { font-size: 13px; font-weight: 600; color: #2c2c2a; }
+        .delivery-desc { font-size: 11px; color: #888; margin-top: 2px; }
+
+        .alert-box { background: #ffeaea; border: 1px solid #f5c6c6; border-radius: 10px; padding: 10px 14px; font-size: 13px; color: #a32d2d; margin-bottom: 16px; display: none; }
+        .alert-box.show { display: block; }
+
+        .submit-btn { width: 100%; padding: 14px; background: #ff6b35; color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.25s; font-family: 'Poppins', sans-serif; }
+        .submit-btn:hover { background: #e55a28; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,107,53,0.35); }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a class="nav-brand" href="/">🍱 FoodMitra</a>
+    <a class="nav-back" href="/menu/">← Browse More</a>
+</nav>
+
+<div class="page-wrap">
+
+    <!-- FOOD DETAILS -->
+    <div class="food-card">
+        {% if menu_item.photo %}
+        <img src="{{ menu_item.photo.url }}" class="food-img" alt="{{ menu_item.food_name }}">
+        {% else %}
+        <div class="food-img-placeholder">🍛</div>
+        {% endif %}
+        <div class="food-details">
+            <div class="food-name">{{ menu_item.food_name }}</div>
+            <div class="food-cook">👩‍🍳 by {{ menu_item.cook.user.first_name }} {{ menu_item.cook.user.last_name }}</div>
+            {% if menu_item.description %}
+            <div class="food-desc">{{ menu_item.description }}</div>
+            {% endif %}
+            <div class="food-meta">
+                <span class="meta-tag tag-price">₹{{ menu_item.price }}</span>
+                {% if menu_item.is_veg %}
+                <span class="meta-tag tag-veg">🟢 Vegetarian</span>
+                {% else %}
+                <span class="meta-tag tag-nonveg">🔴 Non-Veg</span>
+                {% endif %}
+                <span class="meta-tag tag-cuisine">{{ menu_item.get_cuisine_type_display }}</span>
+                <span class="meta-tag tag-qty">{{ menu_item.quantity_available }} plates left</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDER FORM -->
+    <div class="order-form">
+        <div class="form-title">🛒 Place Your Order</div>
+
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert-box show">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+
+        <div class="alert-box" id="alertBox"></div>
+
+        <form method="POST" id="orderForm">
+            {% csrf_token %}
+            <input type="hidden" name="delivery_type" id="deliveryInput" value="">
+            <input type="hidden" name="payment_method" id="paymentInput" value="">
+
+            <!-- QUANTITY -->
+            <div class="field-group">
+                <label>Quantity (Max {{ menu_item.quantity_available }} plates)</label>
+                <input type="number" name="quantity" id="quantityInput" value="1" min="1" max="{{ menu_item.quantity_available }}">
+            </div>
+
+            <!-- DELIVERY TYPE -->
+            <div class="field-group">
+                <label>Delivery Type</label>
+                <div class="delivery-options">
+                    <div class="delivery-btn" id="pickupBtn" onclick="selectDelivery('pickup')">
+                        <span class="delivery-icon">🚶</span>
+                        <div class="delivery-label">Self Pickup</div>
+                        <div class="delivery-desc">You pick up from cook's home address</div>
+                    </div>
+                    <div class="delivery-btn" id="deliveryBtn" onclick="selectDelivery('delivery')">
+                        <span class="delivery-icon">🏠</span>
+                        <div class="delivery-label">Home Delivery</div>
+                        <div class="delivery-desc">Cook delivers to your address directly</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAYMENT METHOD -->
+            <div class="field-group">
+                <label>Payment Method</label>
+                <div class="delivery-options">
+                    <div class="delivery-btn" id="onlineBtn" onclick="selectPayment('online')">
+                        <span class="delivery-icon">💳</span>
+                        <div class="delivery-label">Pay Online</div>
+                        <div class="delivery-desc">UPI, card, net banking, wallet</div>
+                    </div>
+                    <div class="delivery-btn" id="codBtn" onclick="selectPayment('cod')">
+                        <span class="delivery-icon">💵</span>
+                        <div class="delivery-label">Cash on Delivery</div>
+                        <div class="delivery-desc">Pay when your order arrives</div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                Confirm Order 🍛
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+let currentDelivery = '';
+let currentPayment = '';
+
+function selectDelivery(type) {
+    currentDelivery = type;
+    document.getElementById('deliveryInput').value = type;
+    document.getElementById('pickupBtn').classList.toggle('active', type === 'pickup');
+    document.getElementById('deliveryBtn').classList.toggle('active', type === 'delivery');
+}
+
+function selectPayment(type) {
+    currentPayment = type;
+    document.getElementById('paymentInput').value = type;
+    document.getElementById('onlineBtn').classList.toggle('active', type === 'online');
+    document.getElementById('codBtn').classList.toggle('active', type === 'cod');
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = type === 'cod' ? 'Place Order (Pay on Delivery) 🍛' : 'Confirm Order & Pay 💳';
+}
+
+document.getElementById('orderForm').addEventListener('submit', function(e) {
+    const deliveryType = document.getElementById('deliveryInput').value;
+    const paymentMethod = document.getElementById('paymentInput').value;
+
+    if (!deliveryType || !paymentMethod) {
+        e.preventDefault();
+        const alertBox = document.getElementById('alertBox');
+        let missing = [];
+        if (!deliveryType) missing.push('a delivery type');
+        if (!paymentMethod) missing.push('a payment method');
+        alertBox.textContent = 'Please select ' + missing.join(' and ') + '.';
+        alertBox.classList.add('show');
+        alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+});
+</script>
+
+</body>
+</html>

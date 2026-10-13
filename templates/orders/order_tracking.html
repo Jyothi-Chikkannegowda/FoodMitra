@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Tracking - FoodMitra</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #fff8f0;
+        font-family: "Segoe UI", sans-serif;
+      }
+      .navbar {
+        background: #ff6b35;
+        padding: 14px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .nav-brand {
+        color: #fff;
+        font-size: 20px;
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .nav-back {
+        padding: 7px 20px;
+        background: #fff;
+        color: #ff6b35;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+      }
+
+      .page-wrap {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+
+      .order-card {
+        background: #fff;
+        border-radius: 20px;
+        padding: 28px;
+        box-shadow: 0 8px 32px rgba(255, 107, 53, 0.1);
+        margin-bottom: 20px;
+        animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+      .order-id {
+        font-size: 13px;
+        color: #888;
+        margin-bottom: 4px;
+      }
+      .order-name {
+        font-size: 22px;
+        font-weight: 700;
+        color: #2c2c2a;
+        margin-bottom: 6px;
+      }
+      .order-meta {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+      .meta-tag {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+      .tag-price {
+        background: #fff3ee;
+        color: #ff6b35;
+      }
+      .tag-delivery {
+        background: #e3f2fd;
+        color: #1565c0;
+      }
+
+      /* TRACKING STEPS */
+      .tracking-wrap {
+        position: relative;
+        padding: 10px 0;
+      }
+      .tracking-line {
+        position: absolute;
+        left: 22px;
+        top: 30px;
+        bottom: 30px;
+        width: 2px;
+        background: #e8e8e8;
+        z-index: 0;
+      }
+      .tracking-progress {
+        position: absolute;
+        left: 22px;
+        top: 30px;
+        width: 2px;
+        background: #ff6b35;
+        z-index: 1;
+        transition: height 0.8s ease;
+      }
+      .tracking-step {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 24px;
+        position: relative;
+        z-index: 2;
+      }
+      .step-circle {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        flex-shrink: 0;
+        transition: all 0.3s;
+      }
+      .step-done {
+        background: #ff6b35;
+        border: 2px solid #ff6b35;
+      }
+      .step-active {
+        background: #fff;
+        border: 2px solid #ff6b35;
+        animation: pulse 1.5s infinite;
+      }
+      .step-pending {
+        background: #fff;
+        border: 2px solid #e8e8e8;
+      }
+      .step-info {
+        padding-top: 8px;
+      }
+      .step-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #2c2c2a;
+      }
+      .step-desc {
+        font-size: 12px;
+        color: #888;
+        margin-top: 2px;
+      }
+      .step-time {
+        font-size: 11px;
+        color: #ff6b35;
+        margin-top: 2px;
+      }
+
+      .cook-info {
+        background: #fff8f0;
+        border-radius: 12px;
+        padding: 16px;
+        margin-top: 20px;
+      }
+      .cook-info-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 8px;
+      }
+      .cook-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: #2c2c2a;
+      }
+      .cook-address {
+        font-size: 13px;
+        color: #888;
+        margin-top: 4px;
+      }
+
+      .action-btns {
+        display: flex;
+        gap: 12px;
+        margin-top: 20px;
+      }
+      .btn-primary-custom {
+        flex: 1;
+        padding: 12px;
+        background: #ff6b35;
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        text-align: center;
+      }
+      .btn-secondary-custom {
+        flex: 1;
+        padding: 12px;
+        background: #fff;
+        color: #ff6b35;
+        border: 1.5px solid #ff6b35;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        text-align: center;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.4);
+        }
+        50% {
+          box-shadow: 0 0 0 8px rgba(255, 107, 53, 0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a class="nav-brand" href="/">🍱 FoodMitra</a>
+      <a class="nav-back" href="/menu/">← Browse More</a>
+    </nav>
+
+    <div class="page-wrap">
+      <div class="order-card">
+        <div class="order-id">Order #{{ order.id }}</div>
+        <div class="order-name">{{ order.menu_item.food_name }}</div>
+        <div class="order-meta">
+          <span class="meta-tag tag-price">₹{{ order.total_price }}</span>
+          <span class="meta-tag tag-delivery">{{ order.delivery_type }}</span>
+          <span class="meta-tag" style="background: #fff3e0; color: #e65100"
+            >{{ order.quantity }} plate(s)</span
+          >
+        </div>
+
+        <!-- TRACKING STEPS -->
+        <div class="tracking-wrap">
+          <div class="tracking-line"></div>
+          <div class="tracking-progress" id="progressLine"></div>
+
+          <!-- STEP 1 - PENDING -->
+          <div class="tracking-step">
+            <div
+              class="step-circle {% if order.status == 'pending' %}step-active{% elif order.status != 'pending' %}step-done{% else %}step-pending{% endif %}"
+            >
+              {% if order.status == 'pending' %}⏳{% else %}✅{% endif %}
+            </div>
+            <div class="step-info">
+              <div class="step-title">Order Placed</div>
+              <div class="step-desc">
+                Your order has been placed successfully
+              </div>
+              <div class="step-time">
+                {{ order.order_time|date:"d M Y, h:i A" }}
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2 - ACCEPTED -->
+          <div class="tracking-step">
+            <div
+              class="step-circle {% if order.status == 'accepted' %}step-active{% elif order.status == 'preparing' or order.status == 'ready' or order.status == 'delivered' %}step-done{% else %}step-pending{% endif %}"
+            >
+              {% if order.status == 'accepted' or order.status == 'preparing' or order.status == 'ready' or order.status == 'delivered' %} 
+              ✅ 
+              {% else %} 
+              👨‍🍳 
+              {% endif %}
+            </div>
+            <div class="step-info">
+              <div class="step-title">Order Accepted</div>
+              <div class="step-desc">Cook has accepted your order</div>
+            </div>
+          </div>
+
+          <!-- STEP 3 - PREPARING -->
+          <div class="tracking-step">
+            <div
+              class="step-circle {% if order.status == 'preparing' %}step-active{% elif order.status == 'ready' or order.status == 'delivered' %}step-done{% else %}step-pending{% endif %}"
+            >
+              {% if order.status == 'preparing' or order.status == 'ready' or order.status == 'delivered' %}
+              ✅
+              {% else %}
+              🍳
+              {% endif %}
+            </div>
+            <div class="step-info">
+              <div class="step-title">Preparing Food</div>
+              <div class="step-desc">Cook is preparing your food</div>
+            </div>
+          </div>
+
+          <!-- STEP 4 - READY -->
+          <div class="tracking-step">
+            <div
+              class="step-circle {% if order.status == 'ready' %}step-active{% elif order.status == 'delivered' %}step-done{% else %}step-pending{% endif %}"
+            >
+              {% if order.status == 'ready' or order.status == 'delivered' %}
+              ✅
+              {% else %}
+              📦
+              {% endif %}
+            </div>
+            <div class="step-info">
+              <div class="step-title">Ready</div>
+              <div class="step-desc">Your food is ready!</div>
+            </div>
+          </div>
+
+          <!-- STEP 5 - DELIVERED -->
+          <div class="tracking-step">
+            <div
+              class="step-circle {% if order.status == 'delivered' %}step-done{% else %}step-pending{% endif %}"
+            >
+              {% if order.status == 'delivered' %}✅{% else %}🎉{% endif %}
+            </div>
+            <div class="step-info">
+              <div class="step-title">Delivered</div>
+              <div class="step-desc">Enjoy your home cooked meal!</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COOK INFO -->
+        <div class="cook-info">
+          <div class="cook-info-title">👩‍🍳 Cook Details</div>
+          <div class="cook-name">
+            {{ order.cook.user.first_name }} {{ order.cook.user.last_name }}
+          </div>
+          <div class="cook-address">📍 {{ order.cook.home_address }}</div>
+          <div class="cook-address">📞 {{ order.cook.phone}}</div>
+        </div>
+
+        <div class="action-btns">
+          <a href="/menu/" class="btn-secondary-custom">Browse More</a>
+          {% if order.status == 'delivered' %}
+          <a href="/reviews/add/{{ order.id }}/" class="btn-primary-custom"
+            >Rate & Review ⭐</a
+          >
+          {% endif %}
+          <a href="/orders/" class="btn-secondary-custom">My Orders</a>
+        </div>
+
+        {% if order.status == 'delivered' %}
+        <div style="margin-top: 14px">
+          <a
+            href="/orders/receipt/{{ order.id }}/"
+            style="
+              display: block;
+              width: 100%;
+              padding: 12px;
+              background: #2c2c2a;
+              color: #fff;
+              border-radius: 12px;
+              text-align: center;
+              text-decoration: none;
+              font-size: 14px;
+              font-weight: 600;
+            "
+          >
+            📄 Download PDF Receipt
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>

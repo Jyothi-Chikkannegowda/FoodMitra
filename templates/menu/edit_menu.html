@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Menu | FoodMitra</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      :root {
+        --clr-primary: #ff6b35;
+        --clr-primary-dark: #e85a2a;
+        --clr-gold: #f7931e;
+        --clr-ink: #2b2420;
+        --clr-muted: #8a8078;
+        --clr-border: #ffe0d0;
+        --font-display: "Poppins", "Segoe UI", sans-serif;
+        --font-body: "Inter", "Segoe UI", sans-serif;
+      }
+      body {
+        background: #fff8f0;
+        font-family: var(--font-body);
+        color: var(--clr-ink);
+        min-height: 100vh;
+        padding: 40px 20px;
+      }
+
+      .page-title {
+        text-align: center;
+        font-family: var(--font-display);
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--clr-primary-dark);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 10px;
+      }
+
+      .card {
+        max-width: 700px;
+        margin: 0 auto;
+        border: 1px solid var(--clr-border);
+        border-radius: 20px;
+        box-shadow: 0 16px 40px rgba(255, 107, 53, 0.12);
+        overflow: hidden;
+        animation: fadeUp 0.5s ease both;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .card-header {
+        background: linear-gradient(120deg, #ff6b35 0%, #f7931e 100%);
+        color: white;
+        text-align: center;
+        font-family: var(--font-display);
+        font-size: 21px;
+        font-weight: 700;
+        padding: 22px 20px;
+        letter-spacing: -0.01em;
+      }
+
+      .card-body {
+        padding: 32px 34px 30px;
+        background: #fff;
+      }
+
+      .form-label,
+      label {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--clr-ink);
+        margin-bottom: 6px;
+        display: block;
+      }
+
+      .form-control,
+      .form-select {
+        border: 1.5px solid var(--clr-border);
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 13.5px;
+        color: var(--clr-ink);
+        background: #fffdfb;
+        transition: all 0.2s;
+      }
+      .form-control:focus,
+      .form-select:focus {
+        outline: none;
+        border-color: var(--clr-primary);
+        box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.12);
+      }
+      textarea.form-control {
+        resize: vertical;
+      }
+
+      .mb-3 {
+        margin-bottom: 18px;
+      }
+
+      .checks-row {
+        display: flex;
+        gap: 28px;
+        margin: 4px 0 20px;
+      }
+      .form-check {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding-left: 0;
+      }
+      .form-check-input {
+        width: 17px;
+        height: 17px;
+        margin: 0;
+        accent-color: var(--clr-primary);
+        cursor: pointer;
+      }
+      .form-check-label {
+        font-size: 13.5px;
+        font-weight: 600;
+        color: var(--clr-ink);
+        cursor: pointer;
+      }
+
+      .image-preview-wrap {
+        margin-bottom: 18px;
+      }
+      .image-preview-wrap img {
+        border-radius: 14px;
+        border: 1px solid var(--clr-border);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        max-width: 220px;
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      .btn-row {
+        display: flex;
+        gap: 12px;
+        margin-top: 26px;
+      }
+      .btn-save {
+        flex: 1;
+        background: linear-gradient(135deg, #ff7b32, #ff5b20);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 12px;
+        font-size: 14.5px;
+        font-weight: 700;
+        font-family: var(--font-body);
+        transition: all 0.25s;
+      }
+      .btn-save:hover {
+        color: #fff;
+        transform: translateY(-1px);
+        box-shadow: 0 10px 22px rgba(255, 107, 53, 0.32);
+      }
+      .btn-secondary {
+        background: #f4f0ec;
+        color: var(--clr-muted);
+        border: none;
+        border-radius: 12px;
+        padding: 12px 24px;
+        font-size: 14.5px;
+        font-weight: 700;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+      }
+      .btn-secondary:hover {
+        background: #e9e3dd;
+        color: var(--clr-ink);
+      }
+
+      hr.section-divider {
+        border: none;
+        border-top: 1px solid var(--clr-border);
+        margin: 22px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-title">🍱 FoodMitra</div>
+    <div class="card">
+      <div class="card-header">✏️ Edit Menu Item</div>
+      <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label">Food Name</label>
+            <input
+              type="text"
+              name="food_name"
+              value="{{ menu.food_name }}"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label>Description</label>
+            <textarea name="description" class="form-control" rows="3">{{ menu.description }}</textarea>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label>Price (₹)</label>
+              <input
+                type="number"
+                step="0.01"
+                name="price"
+                value="{{ menu.price }}"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label>Quantity</label>
+              <input
+                type="number"
+                name="quantity"
+                value="{{ menu.quantity_available }}"
+                class="form-control"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label>Cuisine</label>
+            <select name="cuisine_type" class="form-select">
+              {% for value, label in menu.CUISINE_CHOICES %}
+              <option
+                value="{{ value }}"
+                {% if menu.cuisine_type == value %}selected{% endif %}
+              >
+                {{ label }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="checks-row">
+            <div class="form-check">
+              <input
+                type="checkbox"
+                name="is_veg"
+                id="isVeg"
+                class="form-check-input"
+                {% if menu.is_veg %}checked{% endif %}
+              />
+              <label class="form-check-label" for="isVeg">Veg</label>
+            </div>
+            <div class="form-check">
+              <input
+                type="checkbox"
+                name="is_preorder"
+                id="isPreorder"
+                class="form-check-input"
+                {% if menu.is_preorder %}checked{% endif %}
+              />
+              <label class="form-check-label" for="isPreorder">Pre Order</label>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label>Available Date</label>
+            <input
+              type="date"
+              name="available_date"
+              value="{{ menu.available_date|date:'Y-m-d' }}"
+              class="form-control"
+            />
+          </div>
+
+          <hr class="section-divider" />
+
+          {% if menu.photo %}
+          <div class="image-preview-wrap">
+            <label>Current Image</label>
+            <img src="{{ menu.photo.url }}" alt="{{ menu.food_name }}" />
+          </div>
+          {% endif %}
+
+          <div class="mb-3">
+            <label>Change Image</label>
+            <input type="file" name="photo" class="form-control" />
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-save">Save Changes</button>
+            <a href="{% url 'dashboard' %}" class="btn-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
