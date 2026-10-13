@@ -81,7 +81,3 @@ FoodMitra/
 
 **Jyothi Chikkannegowda**
 GitHub: [@Jyothi-Chikkannegowda](https://github.com/Jyothi-Chikkannegowda)
-
-## 📄 License
-
-This project is for educational purposes.
